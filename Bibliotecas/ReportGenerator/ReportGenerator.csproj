@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <!-- Dados do Pacote -->
+    <Title>Alura Report Generator</Title>
+    <PackageId>Alura_ReportGenerator</PackageId>
+    <Version>1.1.0</Version>
+    <Authors>Cauã Aguiar</Authors>
+    <Company>Alura</Company>
+    <Description>biblioteca de geração de relatorios</Description>
+
+    <!-- Licença MIT e README -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <!-- Inclusão do README.md no pacote -->
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="itext7" Version="9.8.0" />
+    <PackageReference Include="itext7.commons" Version="9.8.0" />
+  </ItemGroup>
+
+</Project>
