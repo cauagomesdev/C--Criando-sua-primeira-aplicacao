@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "dgSpecHash": "pIHagSJ3gow=",
+  "success": true,
+  "projectFilePath": "c:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\UsuariosApi.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\caua.gomes\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\caua.gomes\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
+    "C:\\Users\\caua.gomes\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.12\\microsoft.aspnetcore.openapi.10.0.12.nupkg.sha512",
+    "C:\\Users\\caua.gomes\\.nuget\\packages\\microsoft.extensions.apidescription.server\\10.0.0\\microsoft.extensions.apidescription.server.10.0.0.nupkg.sha512",
+    "C:\\Users\\caua.gomes\\.nuget\\packages\\microsoft.openapi\\2.12.0\\microsoft.openapi.2.12.0.nupkg.sha512",
+    "C:\\Users\\caua.gomes\\.nuget\\packages\\swashbuckle.aspnetcore\\10.3.1\\swashbuckle.aspnetcore.10.3.1.nupkg.sha512",
+    "C:\\Users\\caua.gomes\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\10.3.1\\swashbuckle.aspnetcore.swagger.10.3.1.nupkg.sha512",
+    "C:\\Users\\caua.gomes\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\10.3.1\\swashbuckle.aspnetcore.swaggergen.10.3.1.nupkg.sha512",
+    "C:\\Users\\caua.gomes\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\10.3.1\\swashbuckle.aspnetcore.swaggerui.10.3.1.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "O pacote 'AutoMapper' 12.0.1 tem uma alta vulnerabilidade de gravidade conhecida, https://github.com/advisories/GHSA-rvv3-g6hj-g44x",
+      "projectPath": "c:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\UsuariosApi.csproj",
+      "warningLevel": 1,
+      "filePath": "c:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\UsuariosApi.csproj",
+      "libraryId": "AutoMapper",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
+}
