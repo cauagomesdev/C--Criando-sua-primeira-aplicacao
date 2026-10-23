@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "+8X7m0267Bo=",
+  "dgSpecHash": "FaJdQtCLaZ4=",
   "success": true,
   "projectFilePath": "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\FilmesApi\\FilmesApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\caua.gomes\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\caua.gomes\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
+    "C:\\Users\\caua.gomes\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
     "C:\\Users\\caua.gomes\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\caua.gomes\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\10.0.13\\microsoft.aspnetcore.jsonpatch.10.0.13.nupkg.sha512",
     "C:\\Users\\caua.gomes\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\10.0.13\\microsoft.aspnetcore.mvc.newtonsoftjson.10.0.13.nupkg.sha512",
@@ -23,6 +24,7 @@
     "C:\\Users\\caua.gomes\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.0\\microsoft.entityframeworkcore.abstractions.9.0.0.nupkg.sha512",
     "C:\\Users\\caua.gomes\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\9.0.0\\microsoft.entityframeworkcore.analyzers.9.0.0.nupkg.sha512",
     "C:\\Users\\caua.gomes\\.nuget\\packages\\microsoft.entityframeworkcore.design\\9.0.0\\microsoft.entityframeworkcore.design.9.0.0.nupkg.sha512",
+    "C:\\Users\\caua.gomes\\.nuget\\packages\\microsoft.entityframeworkcore.proxies\\9.0.0\\microsoft.entityframeworkcore.proxies.9.0.0.nupkg.sha512",
     "C:\\Users\\caua.gomes\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\9.0.0\\microsoft.entityframeworkcore.relational.9.0.0.nupkg.sha512",
     "C:\\Users\\caua.gomes\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\9.0.0\\microsoft.entityframeworkcore.tools.9.0.0.nupkg.sha512",
     "C:\\Users\\caua.gomes\\.nuget\\packages\\microsoft.extensions.apidescription.server\\10.0.0\\microsoft.extensions.apidescription.server.10.0.0.nupkg.sha512",
@@ -49,7 +51,7 @@
     {
       "code": "NU1903",
       "level": "Warning",
-      "message": "O pacote 'AutoMapper' 12.0.1 tem uma alta vulnerabilidade de gravidade conhecida, https://github.com/advisories/GHSA-rvv3-g6hj-g44x",
+      "message": "Package 'AutoMapper' 12.0.1 has a known high severity vulnerability, https://github.com/advisories/GHSA-rvv3-g6hj-g44x",
       "projectPath": "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\FilmesApi\\FilmesApi.csproj",
       "warningLevel": 1,
       "filePath": "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\FilmesApi\\FilmesApi.csproj",
