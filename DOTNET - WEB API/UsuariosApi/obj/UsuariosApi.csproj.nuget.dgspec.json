@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\UsuariosApi.csproj": {}
+    "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\UsuariosApi.csproj": {}
   },
   "projects": {
-    "c:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\UsuariosApi.csproj": {
+    "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\UsuariosApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\UsuariosApi.csproj",
+        "projectUniqueName": "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\UsuariosApi.csproj",
         "projectName": "UsuariosApi",
-        "projectPath": "c:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\UsuariosApi.csproj",
+        "projectPath": "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\UsuariosApi.csproj",
         "packagesPath": "C:\\Users\\caua.gomes\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\obj\\",
+        "outputPath": "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\caua.gomes\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -50,13 +50,35 @@
               "target": "Package",
               "version": "[12.0.1, )"
             },
-            "Microsoft.AspNetCore.OpenApi": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
-              "version": "[10.0.12, )"
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.Extensions.Identity.Stores": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[9.0.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[10.3.1, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.23.0, )"
             }
           },
           "imports": [
