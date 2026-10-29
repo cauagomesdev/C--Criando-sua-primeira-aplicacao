@@ -1,0 +1,24 @@
+﻿<h2>Cadastro do Artista</h2>
+
+<form>
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label>Nome</label>
+        <InputText class="input" />
+    </div>
+
+    <div class="form-group">
+        <label>Biografia</label>
+        <InputTextArea class="input" Rows="4" />
+    </div>
+
+    <div class="form-group">
+        <label>Foto de Perfil</label><br />
+		<img alt="Preview" class="img-preview" />
+        <InputFile accept="image/jpeg" />
+    </div>
+
+    <button type="submit" class="btn">Cadastrar</button>
+</form>

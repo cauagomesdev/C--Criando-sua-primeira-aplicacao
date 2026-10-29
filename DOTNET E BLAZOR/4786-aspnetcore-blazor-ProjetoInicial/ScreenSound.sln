@@ -1,0 +1,79 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScreenSound.API", "ScreenSound.API\ScreenSound.API.csproj", "{0A657BF5-D051-4CB4-8751-2622622969DF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScreenSound.Shared.Modelos", "ScreenSound.Shared.Modelos\ScreenSound.Shared.Modelos.csproj", "{10819FD0-150C-4068-93B7-BCC56B5D5424}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScreenSound.Shared.Dados", "ScreenSound.Shared.Dados\ScreenSound.Shared.Dados.csproj", "{D739D1BF-7AAE-4F5B-A8CA-FA8773869DEB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Recursos", "Recursos", "{7B04FD16-7E8E-49B0-9994-4DB6FC517BCF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{42981C42-0502-4DBA-A1D3-3410A09E61D7}"
+	ProjectSection(SolutionItems) = preProject
+		Recursos\images\Artista.jpeg = Recursos\images\Artista.jpeg
+		Recursos\images\cardArtista.png = Recursos\images\cardArtista.png
+		Recursos\images\favicon.png = Recursos\images\favicon.png
+		Recursos\images\Foto_001.png = Recursos\images\Foto_001.png
+		Recursos\images\Foto_002.png = Recursos\images\Foto_002.png
+		Recursos\images\Foto_003.png = Recursos\images\Foto_003.png
+		Recursos\images\Foto_004.png = Recursos\images\Foto_004.png
+		Recursos\images\Foto_005.png = Recursos\images\Foto_005.png
+		Recursos\images\Foto_006.png = Recursos\images\Foto_006.png
+		Recursos\images\Foto_007.png = Recursos\images\Foto_007.png
+		Recursos\images\Foto_008.png = Recursos\images\Foto_008.png
+		Recursos\images\Foto_009.png = Recursos\images\Foto_009.png
+		Recursos\images\icon-192.png = Recursos\images\icon-192.png
+		Recursos\images\screensound-logo.png = Recursos\images\screensound-logo.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Componentes", "Componentes", "{5CB5D774-B724-4C25-A729-49FF4CC28F0C}"
+	ProjectSection(SolutionItems) = preProject
+		Recursos\Componentes\CardArtista.html = Recursos\Componentes\CardArtista.html
+		Recursos\Componentes\CardMusica.html = Recursos\Componentes\CardMusica.html
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pages", "Pages", "{15018420-306D-4DE5-9E30-8E48065E06E8}"
+	ProjectSection(SolutionItems) = preProject
+		Recursos\Pages\Artistas.html = Recursos\Pages\Artistas.html
+		Recursos\Pages\CadastrarArtista.html = Recursos\Pages\CadastrarArtista.html
+		Recursos\Pages\CadastrarMusica.html = Recursos\Pages\CadastrarMusica.html
+		Recursos\Pages\EditarArtista.html = Recursos\Pages\EditarArtista.html
+		Recursos\Pages\EditarMusica.html = Recursos\Pages\EditarMusica.html
+		Recursos\Pages\MusicasPorArtista.html = Recursos\Pages\MusicasPorArtista.html
+		Recursos\Pages\MusicasPorGenero.html = Recursos\Pages\MusicasPorGenero.html
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0A657BF5-D051-4CB4-8751-2622622969DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A657BF5-D051-4CB4-8751-2622622969DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A657BF5-D051-4CB4-8751-2622622969DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A657BF5-D051-4CB4-8751-2622622969DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10819FD0-150C-4068-93B7-BCC56B5D5424}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10819FD0-150C-4068-93B7-BCC56B5D5424}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10819FD0-150C-4068-93B7-BCC56B5D5424}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10819FD0-150C-4068-93B7-BCC56B5D5424}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D739D1BF-7AAE-4F5B-A8CA-FA8773869DEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D739D1BF-7AAE-4F5B-A8CA-FA8773869DEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D739D1BF-7AAE-4F5B-A8CA-FA8773869DEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D739D1BF-7AAE-4F5B-A8CA-FA8773869DEB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{42981C42-0502-4DBA-A1D3-3410A09E61D7} = {7B04FD16-7E8E-49B0-9994-4DB6FC517BCF}
+		{5CB5D774-B724-4C25-A729-49FF4CC28F0C} = {7B04FD16-7E8E-49B0-9994-4DB6FC517BCF}
+		{15018420-306D-4DE5-9E30-8E48065E06E8} = {7B04FD16-7E8E-49B0-9994-4DB6FC517BCF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {48F5E4D2-DF4F-4A11-A040-4E52AF492549}
+	EndGlobalSection
+EndGlobal
