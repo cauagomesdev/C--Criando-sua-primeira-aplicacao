@@ -2947,19 +2947,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\caua.gomes\\.nuget\\packages\\": {}
+    "/home/vaio/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\UsuariosApi.csproj",
+      "projectUniqueName": "/home/vaio/Documentos/VSCODE/C#/C--Criando-sua-primeira-aplicacao/DOTNET - WEB API/UsuariosApi/UsuariosApi.csproj",
       "projectName": "UsuariosApi",
-      "projectPath": "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\UsuariosApi.csproj",
-      "packagesPath": "C:\\Users\\caua.gomes\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\obj\\",
+      "projectPath": "/home/vaio/Documentos/VSCODE/C#/C--Criando-sua-primeira-aplicacao/DOTNET - WEB API/UsuariosApi/UsuariosApi.csproj",
+      "packagesPath": "/home/vaio/.nuget/packages/",
+      "outputPath": "/home/vaio/Documentos/VSCODE/C#/C--Criando-sua-primeira-aplicacao/DOTNET - WEB API/UsuariosApi/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\caua.gomes\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/home/vaio/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
@@ -3045,7 +3045,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.402/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",
@@ -3480,6 +3480,16 @@
       "warningLevel": 1,
       "message": "Package 'AutoMapper' 12.0.1 has a known high severity vulnerability, https://github.com/advisories/GHSA-rvv3-g6hj-g44x",
       "libraryId": "AutoMapper",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'MySqlConnector' 2.4.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-473q-m89c-ghf8",
+      "libraryId": "MySqlConnector",
       "targetGraphs": [
         "net10.0"
       ]
