@@ -18,8 +18,8 @@ namespace ScreenSound.Migrations
 
             migrationBuilder.InsertData("Musicas", new string[] { "Nome", "AnoLancamento" }, new object[] { "Se", 1992 });
 
-            // associando as músicas ao artista Djavan
-            migrationBuilder.Sql("update Musicas set ArtistaId = (select Id from Artistas where Nome = 'Djavan')");
+            // a associação das músicas ao artista Djavan foi movida para a migration
+            // RelacionarArtistaMusica, porque a coluna ArtistaId só é criada lá
         }
 
         /// <inheritdoc />
