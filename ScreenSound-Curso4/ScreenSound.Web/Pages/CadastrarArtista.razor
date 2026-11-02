@@ -29,15 +29,14 @@
             <MudCardContent>
                 <MudImage src="@fileImage" />
                 <MudFileUpload T="IBrowserFile" Accept=".png, .jpg" FilesChanged="UploadFile" MaximumFileCount="100">
-                    <ButtonTemplate>
-                        <MudButton HtmlTag="label"                                  
-                                   Variant="Variant.Filled"
+                    <CustomContent>
+                        <MudButton Variant="Variant.Filled"
                                    Color="Color.Primary"
                                    StartIcon="@Icons.Material.Filled.PhotoCamera"
-                                   for="@context">
+                                   OnClick="@context.OpenFilePickerAsync">
                             Foto de Perfil
                         </MudButton>
-                    </ButtonTemplate>
+                    </CustomContent>
                 </MudFileUpload>
             </MudCardContent>
         </div>
