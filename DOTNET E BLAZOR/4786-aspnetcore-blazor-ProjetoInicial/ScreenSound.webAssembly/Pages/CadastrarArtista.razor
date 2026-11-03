@@ -1,0 +1,52 @@
+﻿@using System.ComponentModel.DataAnnotations
+@page "/CadastrarArtista"
+@inject ArtistasAPI artistasAPI
+@inject NavigationManager navigationManager
+
+<h2>Cadastro de Artista</h2>
+
+<EditForm Model="@artista" OnInvalidSubmit="Cadastrar">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+
+    <div class="form-group">
+        <label>Nome</label>
+        <InputText @bind-Value="artista.Nome" class="input"/>
+    </div>
+    <div class="form-group">
+        <label>Biografia</label>        
+        <InputTextArea @bind-Value="artista.Biografia" class="input" Rows = "4"/>
+
+    </div>
+
+    <br/>
+
+    <button type="submit" class="btn">Cadastrar</button>
+
+</EditForm>
+
+@code {
+    private ArtistaFormModel artista = new();
+    private string? fileImage;
+
+    private async Task Cadastrar()
+    {
+        var request = new ArtistaRequest(
+            artista.Nome!,
+            artista.Biografia!,
+            artista.FotoPerfil);
+
+        await artistasAPI.AddArtistaAsync(request);
+        navigationManager.NavigateTo("/Artistas");
+    }
+
+    public class ArtistaFormModel
+    {
+        [Required(ErrorMessage = "O nome é obrigatório")]
+        public string? Nome { get; set; }
+        [Required(ErrorMessage = "A biografia é obrigatória")]
+        public string? Biografia { get; set; }
+        public string? FotoPerfil { get; set; }
+
+    }
+}
