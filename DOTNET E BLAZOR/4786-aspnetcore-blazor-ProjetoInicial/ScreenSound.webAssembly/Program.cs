@@ -6,6 +6,7 @@ using ScreenSound.webAssembly.Services;
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 builder.Services.AddTransient<ArtistasAPI>();
+builder.Services.AddTransient<MusicasAPI>();
 
 builder.Services.AddHttpClient(
     "API",
