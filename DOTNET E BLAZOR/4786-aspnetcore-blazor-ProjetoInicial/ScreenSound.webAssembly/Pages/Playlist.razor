@@ -1,5 +1,7 @@
 ﻿@page "/Playlist"
 @inject MusicasAPI musicasAPI
+@inject IJSRuntime JS
+@inject ILogger<Playlist> logger
 
 <h2>Playlist</h2>
 
@@ -49,6 +51,19 @@ else
     <p>Carregando...</p>
 }
 
+<script type="text/javascript">
+    function scrollToElementByClass(className){
+        const offset = 200; //200 px
+        const element = document.querySelector('.' + className);
+
+        if (element){
+            const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
+            const scrollTo = elementTop - offset;
+            window.scrollTo({ top: scrollTo, behavior: 'smooth'});
+        }
+    } 
+</script>
+
 @code {
     private int? musicaTocandoId;
 
@@ -57,7 +72,21 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        musicas = await musicasAPI.GetMusicasAsync();
+        logger.LogInformation("Iniciando o carregamento das músicas da API");
+
+        try
+        {
+            musicas = await musicasAPI.GetMusicasAsync();
+        }
+        catch( Exception e)
+        {
+            logger.LogError("Houve um erro:" + e.Message);
+        }
+
+        if ( musicas != null)
+        {
+            logger.LogInformation($"Carregadas {musicas.Count} músicas com sucesso");
+        }
     }
 
     private async Task AlternarPlay(int musicaId)
@@ -65,19 +94,29 @@ else
         if (musicaTocandoId == musicaId)
         {
             musicaTocandoId = null;
+            logger.LogInformation($"Música {musicaId} pausada");
         }
         else
         {
+            logger.LogInformation($"Iniciando música {musicaId}.");
             musicaTocandoId = musicaId;
+
+            await ScrollToMusicAsync();
 
             await Task.Delay(1200);
 
             if( musicaTocandoId == musicaId)
             {
+                logger.LogInformation($"Passando para a próxima música após {musicaId}.");
                 musicaId ++;
                 StateHasChanged();
                 await AlternarPlay(musicaId);
             }
         }
+    }
+
+    private async Task ScrollToMusicAsync()
+    {
+        await JS.InvokeVoidAsync("scrollToElementByClass", "playing-row");
     }
 }

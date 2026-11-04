@@ -245,3 +245,17 @@ tr:hover .bi-play-fill::before {
     object-fit: cover;
     border-radius: 8px;
 }
+/* Diz para os ícones de play/stop usarem a fonte do Font Awesome */
+.fa-icon-playstop::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+/* Linha da música que está tocando fica verde */
+tr.playlist-item > td {
+    transition: background-color 0.3s;
+}
+
+tr.playing-row > td {
+    background-color: #8AE491;
+}
