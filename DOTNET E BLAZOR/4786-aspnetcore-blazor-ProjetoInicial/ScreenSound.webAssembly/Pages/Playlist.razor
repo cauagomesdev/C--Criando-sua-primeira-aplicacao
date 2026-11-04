@@ -3,11 +3,11 @@
 
 <h2>Playlist</h2>
 
-<div class="playlist-header d-flex align-items-center mb-4 p-3 bg-dark text-white rounded">
+<div class="playlist-header d-flex align-items-center mb-4 p-3 text-white rounded">
     <img src="images/cardArtista.png" class="playlist-cover me-4" alt="">
     <div>
         <h3 class="mb-1">Minha Playlist Favorita</h3>
-        <p class="text-muted mb-2">Uma seleção das melhores músicas para você curtir!</p>
+        <p class="text-white-50 mb-2">Uma seleção das melhores músicas para você curtir!</p>
         <span class="badge bg-primary">Pública</span>
     </div>
 </div>
@@ -28,9 +28,11 @@
             <tbody>
                 @foreach (var musica in musicas)
                 {
-                    <tr class="playlist-item">
+                    var isPlaying = musica.Id == musicaTocandoId;
+                    <tr class="playlist-item @(isPlaying ? "playing-row" : null)"
+                    @onclick="() => AlternarPlay(musica.Id)">
                         <td>
-                            <span class="bi fa-icon-playstop" />
+                            <span class="bi fa-icon-playstop @(isPlaying ? "bi-stop-fill" : "bi-play-fill")" />
                         </td>
                         <td>@musica.Id</td>
                         <td>@musica.Nome</td>
@@ -48,11 +50,34 @@ else
 }
 
 @code {
+    private int? musicaTocandoId;
+
     private ICollection<MusicaResponse> musicas;
 
 
     protected override async Task OnInitializedAsync()
     {
         musicas = await musicasAPI.GetMusicasAsync();
+    }
+
+    private async Task AlternarPlay(int musicaId)
+    {
+        if (musicaTocandoId == musicaId)
+        {
+            musicaTocandoId = null;
+        }
+        else
+        {
+            musicaTocandoId = musicaId;
+
+            await Task.Delay(1200);
+
+            if( musicaTocandoId == musicaId)
+            {
+                musicaId ++;
+                StateHasChanged();
+                await AlternarPlay(musicaId);
+            }
+        }
     }
 }

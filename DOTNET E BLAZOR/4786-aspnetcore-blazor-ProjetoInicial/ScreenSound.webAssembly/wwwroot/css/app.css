@@ -234,3 +234,14 @@ tr:hover .bi-play-fill::before {
 .bi-stop-fill > svg {
     display: none;
 }
+
+.playlist-header {
+    background: linear-gradient(135deg, #9966FF 0%, #1e1e2f 100%);
+}
+
+.playlist-cover {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+}
