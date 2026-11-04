@@ -210,3 +210,27 @@ a.active {
 .card-body {
     margin-top: 1rem;
 }
+tr.playlist-item {
+    cursor: pointer;
+}
+
+.bi-play-fill::before {
+    content: "\f04b"; /* fa-play */
+    color: transparent;
+}
+
+tr:hover .bi-play-fill::before {
+    content: "\f04b"; /* fa-play */
+    color: black;
+}
+
+.bi-stop-fill::before {
+    content: "\f04d"; /* fa-stop */
+    color: red;
+}
+
+/* Esconde SVG interno do Bootstrap Icons se houver */
+.bi-play-fill > svg,
+.bi-stop-fill > svg {
+    display: none;
+}

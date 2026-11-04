@@ -1,0 +1,58 @@
+﻿@page "/Playlist"
+@inject MusicasAPI musicasAPI
+
+<h2>Playlist</h2>
+
+<div class="playlist-header d-flex align-items-center mb-4 p-3 bg-dark text-white rounded">
+    <img src="images/cardArtista.png" class="playlist-cover me-4" alt="">
+    <div>
+        <h3 class="mb-1">Minha Playlist Favorita</h3>
+        <p class="text-muted mb-2">Uma seleção das melhores músicas para você curtir!</p>
+        <span class="badge bg-primary">Pública</span>
+    </div>
+</div>
+
+@if (musicas != null)
+{
+    <div class="playlist-tracks bg-light rounded p-3">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Número</th>
+                    <th>Música</th>
+                    <th>Artista</th>
+                    <th>Ano Lançamento</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var musica in musicas)
+                {
+                    <tr class="playlist-item">
+                        <td>
+                            <span class="bi fa-icon-playstop" />
+                        </td>
+                        <td>@musica.Id</td>
+                        <td>@musica.Nome</td>
+                        <td>@musica.NomeArtista</td>
+                        <td>@musica.AnoLancamento</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p>Carregando...</p>
+}
+
+@code {
+    private ICollection<MusicaResponse> musicas;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        musicas = await musicasAPI.GetMusicasAsync();
+    }
+}
