@@ -81,6 +81,7 @@ else
         catch( Exception e)
         {
             logger.LogError("Houve um erro:" + e.Message);
+            await JS.InvokeVoidAsync("alert", e.Message);
         }
 
         if ( musicas != null)
