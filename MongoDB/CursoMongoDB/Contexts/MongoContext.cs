@@ -14,6 +14,8 @@ namespace CursoMongoDB.Contexts
             _database = client.GetDatabase(dbName);
         }
 
+        public IMongoDatabase Database => _database;
+
         // Expondo a coleção de notícias já pronta para uso
         public IMongoCollection<BsonDocument> Noticias =>
             _database.GetCollection<BsonDocument>("noticias");
