@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\MongoDB\\CursoMongoDB\\CursoMongoDB.csproj": {}
+    "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\MongoDB\\CursoMongoDB\\CursoMongoDB.csproj": {}
   },
   "projects": {
-    "c:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\MongoDB\\CursoMongoDB\\CursoMongoDB.csproj": {
+    "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\MongoDB\\CursoMongoDB\\CursoMongoDB.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\MongoDB\\CursoMongoDB\\CursoMongoDB.csproj",
+        "projectUniqueName": "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\MongoDB\\CursoMongoDB\\CursoMongoDB.csproj",
         "projectName": "CursoMongoDB",
-        "projectPath": "c:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\MongoDB\\CursoMongoDB\\CursoMongoDB.csproj",
+        "projectPath": "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\MongoDB\\CursoMongoDB\\CursoMongoDB.csproj",
         "packagesPath": "C:\\Users\\caua.gomes\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\MongoDB\\CursoMongoDB\\obj\\",
+        "outputPath": "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\MongoDB\\CursoMongoDB\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\caua.gomes\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -45,6 +45,16 @@
         "net10.0": {
           "framework": "net10.0",
           "targetAlias": "net10.0",
+          "dependencies": {
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[3.13.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.4, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

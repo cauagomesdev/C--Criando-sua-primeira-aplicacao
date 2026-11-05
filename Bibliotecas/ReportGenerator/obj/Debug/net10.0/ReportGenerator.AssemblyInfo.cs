@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("biblioteca de geração de relatorios")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.1.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.1.0+33dacd92b8cd759971164774fa84cb732d4f46c2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.1.0+2119f753ceca98f4d73497747ba98e9350002857")]
 [assembly: System.Reflection.AssemblyProductAttribute("ReportGenerator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ReportGenerator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.1.0.0")]

@@ -1,1 +1,25 @@
-﻿Console.WriteLine("Hello, World!");
+﻿using CursoMongoDB.Programs;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // Chame apenas o programa do vídeo desejado
+        // Program_2_4.Executar();
+        // Program_2_5.Executar();
+        // Program_3_1a.Executar();
+        // Program_3_1b.Executar();
+        // Program_3_2.Executar();
+        // Program_3_3.Executar();
+        // Program_3_5.Executar();
+        // Program_4_1.Executar();
+        // Program_4_2.Executar();
+        // Program_4_3.Executar();
+        // Program_4_5a.ExecutarAsync();
+        // await Program_4_5b.ExecutarAsync();
+        // await Program_5_2a.ExecutarAsync();
+        // await Program_5_2b.ExecutarAsync();
+        // await Program_5_3a.ExecutarAsync();
+        await Program_5_3b.ExecutarAsync();
+    }
+}
