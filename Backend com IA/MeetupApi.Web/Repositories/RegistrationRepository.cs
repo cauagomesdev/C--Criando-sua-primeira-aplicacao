@@ -1,6 +1,7 @@
 using MeetupApi.Web.Data;
 using MeetupApi.Web.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace MeetupApi.Web.Repositories;
 
@@ -15,22 +16,22 @@ public class RegistrationRepository : IRegistrationRepository
 
     public Registration? FindById(long id) =>
         _context.Registrations
-            .Include(r => r.Event)
-            .Include(r => r.Participant)
-            .FirstOrDefault(r => r.Id == id);
+            .Include(registration => registration.Event)
+            .Include(registration => registration.Participant)
+            .FirstOrDefault(registration => registration.Id == id);
 
     public bool ExistsByEventAndParticipantAndStatus(Event @event, Participant participant, RegistrationStatus status) =>
-        _context.Registrations.Any(r =>
-            r.EventId == @event.Id && r.ParticipantId == participant.Id && r.Status == status);
+        _context.Registrations.Any(registration =>
+            registration.EventId == @event.Id && registration.ParticipantId == participant.Id && registration.Status == status);
 
     public long CountByEventAndStatus(Event @event, RegistrationStatus status) =>
-        _context.Registrations.LongCount(r => r.EventId == @event.Id && r.Status == status);
+        _context.Registrations.LongCount(registration => registration.EventId == @event.Id && registration.Status == status);
 
     public List<Registration> FindByEventId(long eventId) =>
         _context.Registrations
-            .Include(r => r.Event)
-            .Include(r => r.Participant)
-            .Where(r => r.EventId == eventId)
+            .Include(registration => registration.Event)
+            .Include(registration => registration.Participant)
+            .Where(registration => registration.EventId == eventId)
             .ToList();
 
     public Registration Save(Registration registration)
@@ -41,5 +42,19 @@ public class RegistrationRepository : IRegistrationRepository
         }
         _context.SaveChanges();
         return registration;
+    }
+
+    public Registration ExecuteWithEventLock(long eventId, Func<Registration> action)
+    {
+        using IDbContextTransaction transaction = _context.Database.BeginTransaction();
+
+        // UPDATE que não altera nada: o banco trava a linha do evento até o commit/rollback
+        _context.Events
+            .Where(@event => @event.Id == eventId)
+            .ExecuteUpdate(setters => setters.SetProperty(@event => @event.Capacity, @event => @event.Capacity));
+
+        Registration result = action();
+        transaction.Commit();
+        return result;
     }
 }
