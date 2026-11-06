@@ -32,6 +32,12 @@ public class ParticipantService
         Participant participant = _participantRepository.FindById(id)
             ?? throw new ResourceNotFoundException($"Participante não encontrado com id: {id}");
 
+        Participant? existingWithEmail = _participantRepository.FindByEmail(request.Email);
+        if (existingWithEmail is not null && existingWithEmail.Id != id)
+        {
+            throw new ConflictException($"Já existe um participante com o e-mail: {request.Email}");
+        }
+
         participant.Name = request.Nome;
         participant.Email = request.Email;
 
