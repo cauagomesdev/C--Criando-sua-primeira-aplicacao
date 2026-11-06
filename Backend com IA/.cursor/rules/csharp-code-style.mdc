@@ -1,0 +1,58 @@
+---
+description: C# code style — Records for DTOs, constructor injection, explicit constructors on entities
+globs: **/*.cs
+alwaysApply: false
+---
+
+# C# Code Style
+
+## DTOs as C# Records
+```csharp
+// ✅ GOOD
+public record EventRequest(
+    [property: Required] string Titulo,
+    string Descricao,
+    [property: Required] DateTime DataHora,
+    string Local,
+    [property: Required][property: Range(1, int.MaxValue)] int LimiteVagas);
+
+public record EventResponse(long Id, string Titulo, string Descricao, DateTime DataHora,
+    string Local, int LimiteVagas, int VagasRestantes);
+
+// ❌ BAD — class with mutable properties and no value semantics
+public class EventRequest { public string Titulo { get; set; } }
+```
+
+## Entities — explicit constructors, no Records
+```csharp
+public class Event
+{
+    public long Id { get; private set; }
+    public string Title { get; set; } = string.Empty;
+
+    public Event() { }               // required by EF Core
+
+    public Event(string title, /* ... */) { Title = title; /* ... */ }
+
+    public override bool Equals(object? obj) => obj is Event other && Id == other.Id;
+    public override int GetHashCode() => Id.GetHashCode();
+}
+```
+- Column/table names in Portuguese via `HasColumnName`/`ToTable` in `OnModelCreating` — never attributes on the entity
+- `Equals`/`GetHashCode` based only on `Id`
+
+## Dependency Injection — constructor only
+```csharp
+// ✅ GOOD
+public class EventService
+{
+    private readonly IEventRepository _eventRepository;
+
+    public EventService(IEventRepository eventRepository)
+    {
+        _eventRepository = eventRepository;
+    }
+}
+```
+Register everything in `Program.cs` (`AddScoped<IEventRepository, EventRepository>()`).
+Never use service locators or static access to services.
