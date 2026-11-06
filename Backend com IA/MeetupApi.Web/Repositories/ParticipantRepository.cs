@@ -13,13 +13,13 @@ public class ParticipantRepository : IParticipantRepository
     }
 
     public Participant? FindById(long id) =>
-        _context.Participants.FirstOrDefault(p => p.Id == id);
+        _context.Participants.FirstOrDefault(participant => participant.Id == id);
 
     public List<Participant> FindAll() =>
         _context.Participants.ToList();
 
     public Participant? FindByEmail(string email) =>
-        _context.Participants.FirstOrDefault(p => p.Email == email);
+        _context.Participants.FirstOrDefault(participant => participant.Email == email);
 
     public Participant Save(Participant participant)
     {

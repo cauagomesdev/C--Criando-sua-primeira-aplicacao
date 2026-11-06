@@ -16,43 +16,43 @@ public class MeetupDbContext : DbContext
         modelBuilder.Entity<Event>(builder =>
         {
             builder.ToTable("eventos");
-            builder.HasKey(e => e.Id);
-            builder.Property(e => e.Id).HasColumnName("id").ValueGeneratedOnAdd();
-            builder.Property(e => e.Title).HasColumnName("titulo").IsRequired();
-            builder.Property(e => e.Description).HasColumnName("descricao").HasColumnType("TEXT");
-            builder.Property(e => e.DateTime).HasColumnName("data_hora").IsRequired();
-            builder.Property(e => e.Location).HasColumnName("local");
-            builder.Property(e => e.Capacity).HasColumnName("limite_vagas").IsRequired();
+            builder.HasKey(@event => @event.Id);
+            builder.Property(@event => @event.Id).HasColumnName("id").ValueGeneratedOnAdd();
+            builder.Property(@event => @event.Title).HasColumnName("titulo").IsRequired();
+            builder.Property(@event => @event.Description).HasColumnName("descricao").HasColumnType("TEXT");
+            builder.Property(@event => @event.DateTime).HasColumnName("data_hora").IsRequired();
+            builder.Property(@event => @event.Location).HasColumnName("local");
+            builder.Property(@event => @event.Capacity).HasColumnName("limite_vagas").IsRequired();
         });
 
         modelBuilder.Entity<Participant>(builder =>
         {
             builder.ToTable("participantes");
-            builder.HasKey(p => p.Id);
-            builder.Property(p => p.Id).HasColumnName("id").ValueGeneratedOnAdd();
-            builder.Property(p => p.Name).HasColumnName("nome").IsRequired();
-            builder.Property(p => p.Email).HasColumnName("email").IsRequired();
-            builder.Property(p => p.CreatedAt).HasColumnName("criado_em");
-            builder.HasIndex(p => p.Email).IsUnique();
+            builder.HasKey(participant => participant.Id);
+            builder.Property(participant => participant.Id).HasColumnName("id").ValueGeneratedOnAdd();
+            builder.Property(participant => participant.Name).HasColumnName("nome").IsRequired();
+            builder.Property(participant => participant.Email).HasColumnName("email").IsRequired();
+            builder.Property(participant => participant.CreatedAt).HasColumnName("criado_em");
+            builder.HasIndex(participant => participant.Email).IsUnique();
         });
 
         modelBuilder.Entity<Registration>(builder =>
         {
             builder.ToTable("inscricoes");
-            builder.HasKey(r => r.Id);
-            builder.Property(r => r.Id).HasColumnName("id").ValueGeneratedOnAdd();
-            builder.Property(r => r.EventId).HasColumnName("evento_id");
-            builder.Property(r => r.ParticipantId).HasColumnName("participante_id");
-            builder.Property(r => r.RegisteredAt).HasColumnName("inscrito_em");
-            builder.Property(r => r.Status).HasColumnName("status").HasConversion<string>();
+            builder.HasKey(registration => registration.Id);
+            builder.Property(registration => registration.Id).HasColumnName("id").ValueGeneratedOnAdd();
+            builder.Property(registration => registration.EventId).HasColumnName("evento_id");
+            builder.Property(registration => registration.ParticipantId).HasColumnName("participante_id");
+            builder.Property(registration => registration.RegisteredAt).HasColumnName("inscrito_em");
+            builder.Property(registration => registration.Status).HasColumnName("status").HasConversion<string>();
 
-            builder.HasOne(r => r.Event)
-                .WithMany(e => e.Registrations)
-                .HasForeignKey(r => r.EventId);
+            builder.HasOne(registration => registration.Event)
+                .WithMany(@event => @event.Registrations)
+                .HasForeignKey(registration => registration.EventId);
 
-            builder.HasOne(r => r.Participant)
+            builder.HasOne(registration => registration.Participant)
                 .WithMany()
-                .HasForeignKey(r => r.ParticipantId);
+                .HasForeignKey(registration => registration.ParticipantId);
         });
     }
 }
