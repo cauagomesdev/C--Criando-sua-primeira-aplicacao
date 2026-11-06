@@ -18,7 +18,8 @@ public class EventServiceTests
         _eventRepository = new Mock<IEventRepository>();
         _eventService = new EventService(
             Microsoft.Extensions.Logging.Abstractions.NullLogger<EventService>.Instance,
-            _eventRepository.Object);
+            _eventRepository.Object,
+            TimeProvider.System);
     }
 
     // -------------------------------------------------------------------------
@@ -228,6 +229,60 @@ public class EventServiceTests
         act.Should().Throw<ResourceNotFoundException>();
     }
 
+    [Fact]
+    public void DeveLancarExcecaoAoAtualizarEventoComDataNoPassado()
+    {
+        // Arrange
+        _eventRepository.Setup(r => r.FindById(1L)).Returns(CriarEvento());
+        EventRequest request = CriarEventoRequest() with { DataHora = DateTime.Now.AddDays(-1) };
+
+        // Act
+        Action act = () => _eventService.AtualizarEvento(1L, request);
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("A data do evento não pode ser no passado");
+        _eventRepository.Verify(r => r.Save(It.IsAny<Event>()), Times.Never);
+    }
+
+    [Fact]
+    public void DeveLancarExcecaoAoReduzirVagasAbaixoDasInscricoesAtivas()
+    {
+        // Arrange
+        Event evento = CriarEvento();
+        evento.Registrations.Add(CriarInscricao(evento, "ana@email.com", RegistrationStatus.ATIVA));
+        evento.Registrations.Add(CriarInscricao(evento, "bruno@email.com", RegistrationStatus.ATIVA));
+        evento.Registrations.Add(CriarInscricao(evento, "carla@email.com", RegistrationStatus.CANCELADA));
+        _eventRepository.Setup(r => r.FindById(1L)).Returns(evento);
+        EventRequest request = CriarEventoRequest() with { LimiteVagas = 1 };
+
+        // Act
+        Action act = () => _eventService.AtualizarEvento(1L, request);
+
+        // Assert
+        act.Should().Throw<ConflictException>();
+        _eventRepository.Verify(r => r.Save(It.IsAny<Event>()), Times.Never);
+    }
+
+    [Fact]
+    public void DevePermitirReduzirVagasAteONumeroDeInscricoesAtivas()
+    {
+        // Arrange
+        Event evento = CriarEvento();
+        evento.Registrations.Add(CriarInscricao(evento, "ana@email.com", RegistrationStatus.ATIVA));
+        evento.Registrations.Add(CriarInscricao(evento, "carla@email.com", RegistrationStatus.CANCELADA));
+        _eventRepository.Setup(r => r.FindById(1L)).Returns(evento);
+        _eventRepository.Setup(r => r.Save(evento)).Returns(evento);
+        EventRequest request = CriarEventoRequest() with { LimiteVagas = 1 };
+
+        // Act
+        EventResponse response = _eventService.AtualizarEvento(1L, request);
+
+        // Assert
+        response.LimiteVagas.Should().Be(1);
+        response.VagasRestantes.Should().Be(0);
+    }
+
     // -------------------------------------------------------------------------
     // DELEÇÃO
     // -------------------------------------------------------------------------
@@ -271,6 +326,9 @@ public class EventServiceTests
         typeof(Event).GetProperty(nameof(Event.Id))!.SetValue(evento, 1L);
         return evento;
     }
+
+    private static Registration CriarInscricao(Event evento, string email, RegistrationStatus status) =>
+        new(evento, new Participant("Participante", email), DateTime.Now, status);
 
     private static EventRequest CriarEventoRequest() =>
         new(

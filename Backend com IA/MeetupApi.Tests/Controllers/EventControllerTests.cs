@@ -191,6 +191,23 @@ public class EventControllerTests : IDisposable
     }
 
     [Fact]
+    public async Task DeveRetornar422AoAtualizarEventoComDataNoPassado()
+    {
+        // Arrange
+        Event evento = SalvarEvento(CriarEvento());
+        EventRequest request = CriarEventoRequest() with { DataHora = DateTime.Now.AddDays(-1) };
+
+        // Act
+        HttpResponseMessage response =
+            await _client.PutAsJsonAsync($"/api/eventos/{evento.Id}", request, Json);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.UnprocessableEntity);
+        ErrorResponse? body = await response.Content.ReadFromJsonAsync<ErrorResponse>(Json);
+        body!.Mensagem.Should().Be("A data do evento não pode ser no passado");
+    }
+
+    [Fact]
     public async Task DeveRetornar404AoAtualizarEventoInexistente()
     {
         // Act
@@ -228,6 +245,52 @@ public class EventControllerTests : IDisposable
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        ErrorResponse? body = await response.Content.ReadFromJsonAsync<ErrorResponse>(Json);
+        body!.Mensagem.Should().NotBeNullOrEmpty();
+    }
+
+    // -------------------------------------------------------------------------
+    // GET /api/eventos/busca?local=
+    // -------------------------------------------------------------------------
+
+    [Fact]
+    public async Task DeveBuscarEventosPorLocalIgnorandoMaiusculas()
+    {
+        // Arrange
+        SalvarEvento(CriarEvento());
+        SalvarEvento(new Event("Meetup Rio", "Encontro", DateTime.Now.AddMonths(1), "Rio de Janeiro", 50));
+
+        // Act
+        List<EventResponse>? responses =
+            await _client.GetFromJsonAsync<List<EventResponse>>("/api/eventos/busca?local=paulo", Json);
+
+        // Assert
+        responses.Should().ContainSingle();
+        responses![0].Local.Should().Be("São Paulo");
+    }
+
+    [Fact]
+    public async Task DeveRetornarListaVaziaQuandoNenhumEventoNoLocal()
+    {
+        // Arrange
+        SalvarEvento(CriarEvento());
+
+        // Act
+        List<EventResponse>? responses =
+            await _client.GetFromJsonAsync<List<EventResponse>>("/api/eventos/busca?local=Recife", Json);
+
+        // Assert
+        responses.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task DeveRetornar422QuandoBuscaSemLocal()
+    {
+        // Act
+        HttpResponseMessage response = await _client.GetAsync("/api/eventos/busca");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.UnprocessableEntity);
         ErrorResponse? body = await response.Content.ReadFromJsonAsync<ErrorResponse>(Json);
         body!.Mensagem.Should().NotBeNullOrEmpty();
     }
