@@ -20,11 +20,12 @@ public class RegistrationServiceTests
         _registrationRepository = new Mock<IRegistrationRepository>();
         _eventRepository = new Mock<IEventRepository>();
         _participantRepository = new Mock<IParticipantRepository>();
-        _registrationService = new RegistrationService(
-            Microsoft.Extensions.Logging.Abstractions.NullLogger<RegistrationService>.Instance,
-            _registrationRepository.Object,
-            _eventRepository.Object,
-            _participantRepository.Object);
+        _registrationService = CriarService(TimeProvider.System);
+
+        // Por padrão o bloqueio do evento apenas executa a ação recebida
+        _registrationRepository
+            .Setup(r => r.ExecuteWithEventLock(It.IsAny<long>(), It.IsAny<Func<Registration>>()))
+            .Returns((long _, Func<Registration> action) => action());
     }
 
     // -------------------------------------------------------------------------
@@ -159,6 +160,45 @@ public class RegistrationServiceTests
         act.Should().Throw<ArgumentException>();
     }
 
+    [Fact]
+    public void DeveVerificarVagasESalvarDentroDoBloqueioDoEvento()
+    {
+        // Arrange
+        Event evento = CriarEvento(100, DateTime.Now.AddDays(2));
+        Participant participante = CriarParticipante();
+        var chamadas = new List<string>();
+
+        _eventRepository.Setup(r => r.FindById(1L)).Returns(evento);
+        _participantRepository.Setup(r => r.FindById(1L)).Returns(participante);
+        _registrationRepository
+            .Setup(r => r.ExecuteWithEventLock(1L, It.IsAny<Func<Registration>>()))
+            .Returns((long _, Func<Registration> action) =>
+            {
+                chamadas.Add("inicio-bloqueio");
+                Registration resultado = action();
+                chamadas.Add("fim-bloqueio");
+                return resultado;
+            });
+        _registrationRepository
+            .Setup(r => r.ExistsByEventAndParticipantAndStatus(evento, participante, RegistrationStatus.ATIVA))
+            .Callback(() => chamadas.Add("duplicidade"))
+            .Returns(false);
+        _registrationRepository
+            .Setup(r => r.CountByEventAndStatus(evento, RegistrationStatus.ATIVA))
+            .Callback(() => chamadas.Add("capacidade"))
+            .Returns(0L);
+        _registrationRepository
+            .Setup(r => r.Save(It.IsAny<Registration>()))
+            .Callback(() => chamadas.Add("save"))
+            .Returns(CriarInscricao(evento, participante, RegistrationStatus.ATIVA));
+
+        // Act
+        _registrationService.Inscrever(1L, CriarInscricaoRequest());
+
+        // Assert
+        chamadas.Should().Equal("inicio-bloqueio", "duplicidade", "capacidade", "save", "fim-bloqueio");
+    }
+
     // -------------------------------------------------------------------------
     // LISTAGEM
     // -------------------------------------------------------------------------
@@ -172,6 +212,7 @@ public class RegistrationServiceTests
         Participant participante = CriarParticipante();
         Registration inscricao = CriarInscricao(evento, participante, RegistrationStatus.ATIVA);
 
+        _eventRepository.Setup(r => r.ExistsById(1L)).Returns(true);
         _registrationRepository.Setup(r => r.FindByEventId(1L)).Returns(new List<Registration> { inscricao });
 
         // Act
@@ -181,6 +222,20 @@ public class RegistrationServiceTests
         responses.Should().HaveCount(1);
         responses[0].EmailParticipante.Should().Be("ana@email.com");
         responses[0].Status.Should().Be("ATIVA");
+    }
+
+    [Fact]
+    public void DeveLancarExcecaoQuandoListarInscricoesDeEventoInexistente()
+    {
+        // Arrange
+        _eventRepository.Setup(r => r.ExistsById(99L)).Returns(false);
+
+        // Act
+        Action act = () => _registrationService.ListarInscricoes(99L);
+
+        // Assert
+        act.Should().Throw<ResourceNotFoundException>();
+        _registrationRepository.Verify(r => r.FindByEventId(It.IsAny<long>()), Times.Never);
     }
 
     // -------------------------------------------------------------------------
@@ -263,9 +318,77 @@ public class RegistrationServiceTests
         act.Should().Throw<ArgumentException>();
     }
 
+    [Fact]
+    public void DeveLancarExcecaoQuandoInscricaoNaoPertenceAoEvento()
+    {
+        // Arrange
+        DateTime dataFutura = DateTime.Now.AddDays(2);
+        Event evento = CriarEvento(100, dataFutura);
+        Participant participante = CriarParticipante();
+        Registration inscricao = CriarInscricao(evento, participante, RegistrationStatus.ATIVA);
+
+        _registrationRepository.Setup(r => r.FindById(1L)).Returns(inscricao);
+
+        // Act
+        Action act = () => _registrationService.CancelarInscricao(2L, 1L);
+
+        // Assert
+        act.Should().Throw<ResourceNotFoundException>();
+        _registrationRepository.Verify(r => r.Save(It.IsAny<Registration>()), Times.Never);
+    }
+
+    [Fact]
+    public void DevePermitirCancelamentoExatamente24HorasAntesDoEvento()
+    {
+        // Arrange
+        var agora = new DateTime(2026, 11, 10, 10, 0, 0);
+        RegistrationService service = CriarService(new FixedTimeProvider(agora));
+        Event evento = CriarEvento(100, agora.AddHours(24));
+        Participant participante = CriarParticipante();
+        Registration inscricao = CriarInscricao(evento, participante, RegistrationStatus.ATIVA);
+
+        _registrationRepository.Setup(r => r.FindById(1L)).Returns(inscricao);
+        _registrationRepository.Setup(r => r.Save(inscricao)).Returns(inscricao);
+
+        // Act
+        RegistrationResponse response = service.CancelarInscricao(1L, 1L);
+
+        // Assert
+        response.Status.Should().Be("CANCELADA");
+    }
+
+    [Fact]
+    public void DeveLancarExcecaoQuandoCancelamentoUmMinutoDepoisDoLimiteDe24Horas()
+    {
+        // Arrange
+        var agora = new DateTime(2026, 11, 10, 10, 0, 0);
+        RegistrationService service = CriarService(new FixedTimeProvider(agora));
+        Event evento = CriarEvento(100, agora.AddHours(24).AddMinutes(-1));
+        Participant participante = CriarParticipante();
+        Registration inscricao = CriarInscricao(evento, participante, RegistrationStatus.ATIVA);
+
+        _registrationRepository.Setup(r => r.FindById(1L)).Returns(inscricao);
+
+        // Act
+        Action act = () => service.CancelarInscricao(1L, 1L);
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("Cancelamento permitido somente até 24h antes do evento");
+        _registrationRepository.Verify(r => r.Save(It.IsAny<Registration>()), Times.Never);
+    }
+
     // -------------------------------------------------------------------------
     // Helpers
     // -------------------------------------------------------------------------
+
+    private RegistrationService CriarService(TimeProvider timeProvider) =>
+        new(
+            Microsoft.Extensions.Logging.Abstractions.NullLogger<RegistrationService>.Instance,
+            _registrationRepository.Object,
+            _eventRepository.Object,
+            _participantRepository.Object,
+            timeProvider);
 
     private static Event CriarEvento(int limiteVagas, DateTime dataHora)
     {

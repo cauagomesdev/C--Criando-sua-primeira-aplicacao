@@ -174,6 +174,18 @@ public class RegistrationControllerTests : IDisposable
         responses[0].Status.Should().Be("ATIVA");
     }
 
+    [Fact]
+    public async Task DeveRetornar404AoListarInscricoesDeEventoInexistente()
+    {
+        // Act
+        HttpResponseMessage response = await _client.GetAsync("/api/eventos/9999/inscricoes");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        ErrorResponse? body = await response.Content.ReadFromJsonAsync<ErrorResponse>(Json);
+        body!.Mensagem.Should().NotBeNullOrEmpty();
+    }
+
     // -------------------------------------------------------------------------
     // PATCH /api/eventos/{eventoId}/inscricoes/{inscricaoId}/cancelar
     // -------------------------------------------------------------------------
@@ -249,6 +261,27 @@ public class RegistrationControllerTests : IDisposable
         response.StatusCode.Should().Be(HttpStatusCode.UnprocessableEntity);
         ErrorResponse? body = await response.Content.ReadFromJsonAsync<ErrorResponse>(Json);
         body!.Mensagem.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task DeveRetornar404QuandoInscricaoNaoPertenceAoEvento()
+    {
+        // Arrange
+        Event evento = SalvarEvento(CriarEvento(100, DateTime.Now.AddDays(2)));
+        Event outroEvento = SalvarEvento(CriarEvento(100, DateTime.Now.AddDays(3)));
+        Participant participante = SalvarParticipante(new Participant("Ana Silva", "ana@email.com"));
+        Registration inscricao = SalvarInscricao(
+            new Registration(evento, participante, DateTime.Now, RegistrationStatus.ATIVA));
+
+        // Act
+        HttpResponseMessage response = await _client.PatchAsync(
+            $"/api/eventos/{outroEvento.Id}/inscricoes/{inscricao.Id}/cancelar", null);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        HttpResponseMessage lista = await _client.GetAsync($"/api/eventos/{evento.Id}/inscricoes");
+        List<RegistrationResponse>? inscricoes = await lista.Content.ReadFromJsonAsync<List<RegistrationResponse>>(Json);
+        inscricoes!.Single().Status.Should().Be("ATIVA");
     }
 
     // -------------------------------------------------------------------------
