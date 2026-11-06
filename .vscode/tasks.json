@@ -1,0 +1,54 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Curso4: API",
+      "type": "shell",
+      "command": "dotnet run --launch-profile https",
+      "options": { "cwd": "${workspaceFolder}/ScreenSound-Curso4/ScreenSound.API" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "group": "curso4", "panel": "dedicated" }
+    },
+    {
+      "label": "Curso4: Front",
+      "type": "shell",
+      "command": "dotnet run --launch-profile https",
+      "options": { "cwd": "${workspaceFolder}/ScreenSound-Curso4/ScreenSound.Web" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "group": "curso4", "panel": "dedicated" }
+    },
+    {
+      "label": "Curso4: back + front",
+      "dependsOn": ["Curso4: API", "Curso4: Front"],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    },
+
+    {
+      "label": "Blazor: API",
+      "type": "shell",
+      "command": "dotnet run --launch-profile https",
+      "options": { "cwd": "${workspaceFolder}/DOTNET E BLAZOR/4786-aspnetcore-blazor-ProjetoInicial/ScreenSound.API" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "group": "blazor", "panel": "dedicated" }
+    },
+    {
+      "label": "Blazor: Front",
+      "type": "shell",
+      "command": "dotnet run --launch-profile https",
+      "options": { "cwd": "${workspaceFolder}/DOTNET E BLAZOR/4786-aspnetcore-blazor-ProjetoInicial/ScreenSound.webAssembly" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "group": "blazor", "panel": "dedicated" }
+    },
+    {
+      "label": "Blazor: back + front",
+      "dependsOn": ["Blazor: API", "Blazor: Front"],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    }
+  ]
+}

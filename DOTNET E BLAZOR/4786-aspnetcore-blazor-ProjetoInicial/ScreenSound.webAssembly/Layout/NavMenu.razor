@@ -1,6 +1,6 @@
 ﻿<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">ScreenSound.webAssembly</a>
+        <a class="navbar-brand" href=""><img src="images/screensound-logo.png" /></a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -9,22 +9,32 @@
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+    <div class="nav-item px-3">
+        <NavLink class="nav-link disabled">
+            <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Artistas
+        </NavLink>
+        <div class="submenu">
+            <NavLink class="nav-link" href="Artistas">
+                Catálogo de Artistas
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+            <div class="submenu">
+            <NavLink class="nav-link" href="CadastrarArtista">
+                Cadastrar Artista
             </NavLink>
         </div>
+    </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+            <NavLink class="nav-link disabled">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Músicas
             </NavLink>
+            <div class="submenu">
+                <NavLink class="nav-link" href="Playlist">
+                    Playlist
+                </NavLink>
+            </div>
         </div>
-    </nav>
+</nav>
 </div>
 
 @code {

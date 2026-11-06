@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/vaio/Documentos/VSCODE/C#/C--Criando-sua-primeira-aplicacao/DOTNET - WEB API/UsuariosApi/UsuariosApi.csproj": {}
+    "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\UsuariosApi.csproj": {}
   },
   "projects": {
-    "/home/vaio/Documentos/VSCODE/C#/C--Criando-sua-primeira-aplicacao/DOTNET - WEB API/UsuariosApi/UsuariosApi.csproj": {
+    "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\UsuariosApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/vaio/Documentos/VSCODE/C#/C--Criando-sua-primeira-aplicacao/DOTNET - WEB API/UsuariosApi/UsuariosApi.csproj",
+        "projectUniqueName": "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\UsuariosApi.csproj",
         "projectName": "UsuariosApi",
-        "projectPath": "/home/vaio/Documentos/VSCODE/C#/C--Criando-sua-primeira-aplicacao/DOTNET - WEB API/UsuariosApi/UsuariosApi.csproj",
-        "packagesPath": "/home/vaio/.nuget/packages/",
-        "outputPath": "/home/vaio/Documentos/VSCODE/C#/C--Criando-sua-primeira-aplicacao/DOTNET - WEB API/UsuariosApi/obj/",
+        "projectPath": "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\UsuariosApi.csproj",
+        "packagesPath": "C:\\Users\\caua.gomes\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\caua.gomes\\Documents\\CURSOALURA\\C# Criando sua primeira aplicacao\\DOTNET - WEB API\\UsuariosApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/vaio/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\caua.gomes\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
@@ -100,7 +100,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.402/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

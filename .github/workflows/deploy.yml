@@ -1,0 +1,38 @@
+name: Deploy Blazor WebAssembly to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Publish with dotnet
+        run: dotnet publish "DOTNET E BLAZOR/4786-aspnetcore-blazor-ProjetoInicial/ScreenSound.webAssembly/ScreenSound.webAssembly.csproj" --configuration Release --output build
+
+      - name: Change base-tag in index.html from / to repo name
+        run: sed -i 's|<base href="/" />|<base href="/${{ github.event.repository.name }}/" />|g' build/wwwroot/index.html
+
+      - name: Add .nojekyll and 404.html
+        run: |
+          touch build/wwwroot/.nojekyll
+          cp build/wwwroot/index.html build/wwwroot/404.html
+
+      - name: Commit wwwroot to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: build/wwwroot
