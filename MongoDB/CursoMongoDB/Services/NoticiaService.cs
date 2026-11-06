@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CursoMongoDB.Contexts;
 using CursoMongoDB.Models;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
 namespace CursoMongoDB.Services
@@ -176,6 +177,26 @@ namespace CursoMongoDB.Services
             Console.WriteLine(
                 "Dica: Verifique os tipos e campos exigidos pelo schema JSON definido no MongoDB."
             );
+        }
+
+        public async Task AtualizarUrlsFaltantesAsync()
+        {
+            var documentos = await _colecao
+                .Find(FilterDefinition<BsonDocument>.Empty)
+                .ToListAsync();
+            foreach (var doc in documentos)
+            {
+                if (!doc.Contains("Url") || string.IsNullOrWhiteSpace(doc["Url"].AsString))
+                {
+                    var noticia = BsonSerializer.Deserialize<Noticia>(doc);
+                    noticia.Titulo = noticia.Titulo;
+                    var filtro = Builders<BsonDocument>.Filter.Eq("_id", doc["_id"]);
+
+                    var bsonAtualizado = noticia.ToBsonDocument();
+                    await _colecao.ReplaceOneAsync(filtro, bsonAtualizado);
+                    Console.WriteLine($"URL atualizada para o documento com _id: {doc["_id"]}");
+                }
+            }
         }
     }
 }

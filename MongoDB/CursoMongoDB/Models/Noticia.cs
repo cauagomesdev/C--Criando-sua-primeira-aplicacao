@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 
 namespace CursoMongoDB.Models;
@@ -11,6 +12,10 @@ namespace CursoMongoDB.Models;
 public class Noticia
 {
     // public string Titulo { get; set; }
+
+    [BsonId]
+    [JsonIgnore]
+    public ObjectId Id { get; set; }
     private string _titulo;
     public string Titulo
     {
