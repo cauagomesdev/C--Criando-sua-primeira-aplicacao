@@ -10,14 +10,14 @@ alwaysApply: false
 ```csharp
 // ✅ GOOD
 public record EventRequest(
-    [property: Required] string Titulo,
-    string Descricao,
-    [property: Required] DateTime DataHora,
-    string Local,
-    [property: Required][property: Range(1, int.MaxValue)] int LimiteVagas);
+    [Required(AllowEmptyStrings = false)] string Titulo,
+    string? Descricao,
+    [Required] DateTime? DataHora,
+    string? Local,
+    [Required][Range(1, int.MaxValue)] int? LimiteVagas);
 
-public record EventResponse(long Id, string Titulo, string Descricao, DateTime DataHora,
-    string Local, int LimiteVagas, int VagasRestantes);
+public record EventResponse(long Id, string Titulo, string? Descricao, DateTime DataHora,
+    string? Local, int LimiteVagas, int VagasRestantes);
 
 // ❌ BAD — class with mutable properties and no value semantics
 public class EventRequest { public string Titulo { get; set; } }

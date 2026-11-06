@@ -40,12 +40,18 @@ configure `InvalidModelStateResponseFactory` to return `422 Unprocessable Entity
 
 ```csharp
 public record EventRequest(
-    [property: Required] string Titulo,
-    string Descricao,
-    [property: Required] DateTime DataHora,
-    string Local,
-    [property: Required][property: Range(1, int.MaxValue)] int LimiteVagas);
+    [Required(AllowEmptyStrings = false)] string Titulo,
+    string? Descricao,
+    [Required] DateTime? DataHora,
+    string? Local,
+    [Required][Range(1, int.MaxValue)] int? LimiteVagas);
 ```
+
+Put validation attributes on the **constructor parameters** (no `property:` target):
+ASP.NET Core validates positional records through their parameters and rejects
+`[property: ...]` validation attributes on them. Use nullable types (`DateTime?`, `int?`)
+for required value types; otherwise `[Required]` never fails, because the default
+(`0`, `DateTime.MinValue`) is bound when the field is missing.
 
 ## Centralized Error Handling
 Use a single exception-handling middleware — never catch domain exceptions in controllers.
