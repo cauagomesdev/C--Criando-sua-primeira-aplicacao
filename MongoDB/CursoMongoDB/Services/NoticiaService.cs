@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CursoMongoDB.Contexts;
 using CursoMongoDB.Models;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
 namespace CursoMongoDB.Services
@@ -20,6 +21,7 @@ namespace CursoMongoDB.Services
             _colecao = contexto.Noticias;
             _contexto = contexto;
             CriarOuAtualizarSchemaDaColecao();
+            CriarIndiceUnicoParaUrl();
         }
 
         private void CriarOuAtualizarSchemaDaColecao()
@@ -176,6 +178,152 @@ namespace CursoMongoDB.Services
             Console.WriteLine(
                 "Dica: Verifique os tipos e campos exigidos pelo schema JSON definido no MongoDB."
             );
+        }
+
+        public async Task AtualizarUrlsFaltantesAsync()
+        {
+            var documentos = await _colecao
+                .Find(FilterDefinition<BsonDocument>.Empty)
+                .ToListAsync();
+            foreach (var doc in documentos)
+            {
+                if (!doc.Contains("Url") || string.IsNullOrWhiteSpace(doc["Url"].AsString))
+                {
+                    var noticia = BsonSerializer.Deserialize<Noticia>(doc);
+                    noticia.Titulo = noticia.Titulo;
+                    var filtro = Builders<BsonDocument>.Filter.Eq("_id", doc["_id"]);
+
+                    var bsonAtualizado = noticia.ToBsonDocument();
+                    await _colecao.ReplaceOneAsync(filtro, bsonAtualizado);
+                    Console.WriteLine($"URL atualizada para o documento com _id: {doc["_id"]}");
+                }
+            }
+        }
+
+        public async Task RemoverNoticiasComUrlDuplicadaAsync()
+        {
+            var documentos = await _colecao
+                .Find(FilterDefinition<BsonDocument>.Empty)
+                .ToListAsync();
+            var urlsVistas = new HashSet<string>();
+            int removidos = 0;
+
+            foreach (var doc in documentos)
+            {
+                if (
+                    !doc.Contains("Url")
+                    || doc["Url"].IsBsonNull
+                    || doc["Url"].BsonType != BsonType.String
+                )
+                    continue;
+
+                string url = doc["Url"].AsString;
+                if (urlsVistas.Contains(url))
+                {
+                    var filtro = Builders<BsonDocument>.Filter.Eq("_id", doc["_id"]);
+                    await _colecao.DeleteOneAsync(filtro);
+                    Console.WriteLine($"Documento com URL duplicada removido: {url}");
+                    removidos++;
+                }
+                else
+                {
+                    urlsVistas.Add(url);
+                }
+            }
+        }
+
+        private void CriarIndiceUnicoParaUrl()
+        {
+            var indexKeys = Builders<BsonDocument>.IndexKeys.Ascending("Url");
+            var indexOptions = new CreateIndexOptions { Unique = true };
+            var indexModel = new CreateIndexModel<BsonDocument>(indexKeys, indexOptions);
+            _colecao.Indexes.CreateOne(indexModel);
+        }
+
+        public async Task AtualizarTextoPorUrlAsync(string url, string novoTexto)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+                throw new ArgumentException("A URL não pode ser vazia.");
+
+            if (string.IsNullOrWhiteSpace(novoTexto))
+                throw new ArgumentException("O novo texto não pode ser vazio.");
+
+            var filtro = Builders<BsonDocument>.Filter.Eq("Url", url);
+            var atualizacao = Builders<BsonDocument>.Update.Set("Texto", novoTexto);
+            var resultado = await _colecao.UpdateOneAsync(filtro, atualizacao);
+
+            if (resultado.MatchedCount == 0)
+            {
+                Console.WriteLine($"Nenhum documento encontrado com URL: {url}");
+            }
+            else if (resultado.ModifiedCount > 0)
+            {
+                Console.WriteLine($"Texto atualizado com sucesso para a URL: {url}");
+            }
+            else
+            {
+                Console.WriteLine($"Documento encontrado, mas o texto já estava igual.");
+            }
+        }
+
+        public async Task AdicionarComentarioAsync(string url, Comentario novoComentario)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+                throw new ArgumentException("A URL não pode ser vazia.");
+            if (novoComentario == null)
+                throw new ArgumentNullException(nameof(novoComentario));
+            var filtro = Builders<BsonDocument>.Filter.Eq("Url", url);
+            var updateComentario = Builders<BsonDocument>.Update.Push(
+                "Comentarios",
+                novoComentario.ToBsonDocument()
+            );
+            var resultado1 = await _colecao.UpdateOneAsync(filtro, updateComentario);
+            if (resultado1.MatchedCount == 0)
+            {
+                Console.WriteLine($"Nenhuma noticia encontrada com a URL: {url}");
+                return;
+            }
+            var noticiaAtualizada = await _colecao.Find(filtro).FirstOrDefaultAsync();
+            var comentarios = noticiaAtualizada["Comentarios"].AsBsonArray;
+            int totalComentarios = comentarios.Count;
+            var updateTotal = Builders<BsonDocument>.Update.Set(
+                "TotalComentarios",
+                totalComentarios
+            );
+            await _colecao.UpdateOneAsync(filtro, updateTotal);
+            Console.WriteLine(
+                $"Comentário adicionado com sucesso. Total agora: {totalComentarios}"
+            );
+        }
+
+        public async Task RemoverComentarioAsync(string url, string textoComentario)
+        {
+            var filter = Builders<BsonDocument>.Filter.Eq("Url", url);
+            var update = Builders<BsonDocument>.Update.PullFilter(
+                "Comentarios",
+                Builders<BsonDocument>.Filter.Eq("Texto", textoComentario)
+            );
+            var resultado = await _colecao.UpdateOneAsync(filter, update);
+            if (resultado.ModifiedCount > 0)
+            {
+                var noticiaAtualizada = await _colecao.Find(filter).FirstOrDefaultAsync();
+                if (noticiaAtualizada != null)
+                {
+                    var totalAtual = noticiaAtualizada["Comentarios"].AsBsonArray.Count;
+                    var updateTotal = Builders<BsonDocument>.Update.Set(
+                        "TotalComentarios",
+                        totalAtual
+                    );
+                    await _colecao.UpdateOneAsync(filter, updateTotal);
+                    Console.WriteLine($"Comentário removido. Total atualizado: {totalAtual}");
+                }
+                else
+                {
+                    Console.WriteLine(
+                        "Nenhum comentário foi removido. Verifique se o texto está correto."
+                    );
+                }
+            }
         }
     }
 }

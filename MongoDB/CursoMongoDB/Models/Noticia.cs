@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 
 namespace CursoMongoDB.Models;
@@ -11,6 +12,10 @@ namespace CursoMongoDB.Models;
 public class Noticia
 {
     // public string Titulo { get; set; }
+
+    [BsonId]
+    [JsonIgnore]
+    public ObjectId Id { get; set; }
     private string _titulo;
     public string Titulo
     {
@@ -79,6 +84,13 @@ public class Comentario
     public int Curtidas { get; set; }
     public string Usuario { get; set; }
     public DateTime Data { get; set; }
+
+    // Permite ler JSONs que usam "Comentario" em vez de "Texto" (ex.: arquivos do curso)
+    [JsonProperty("Comentario")]
+    private string ComentarioLegado
+    {
+        set => Texto = value;
+    }
 }
 
 public class Anexo

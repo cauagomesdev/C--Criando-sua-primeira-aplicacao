@@ -22,6 +22,12 @@ class Program
         // await Program_5_3a.ExecutarAsync();
         // await Program_5_3b.ExecutarAsync();
         // await Program_6_2a.ExecutarAsync();
-        await Program_6_2b.ExecutarAsync();
+        // await Program_6_2b.ExecutarAsync();
+        // await Program_6_3.ExecutarAsync();
+        // await Program_6_5.ExecutarAsync();
+        // await Program_6_6.ExecutarAsync();
+        // await Program_7_1.ExecutarAsync();
+        // await Program_7_2.ExecutarAsync();
+        await Program_7_3.ExecutarAsync();
     }
 }
