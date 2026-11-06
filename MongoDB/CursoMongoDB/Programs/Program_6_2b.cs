@@ -12,8 +12,7 @@ namespace CursoMongoDB.Programs
     {
         public static async Task ExecutarAsync()
         {
-            var connectionString =
-                "mongodb+srv://cauaaguiarti_db_user:zxX0IrVFIeNfJI6O@clusterteste.x2ruob5.mongodb.net/";
+            var connectionString = Configuracao.ConnectionString;
 
             var contexto = new MongoContext(connectionString, "NoticiasDB");
             var noticiaService = new NoticiaService(contexto);

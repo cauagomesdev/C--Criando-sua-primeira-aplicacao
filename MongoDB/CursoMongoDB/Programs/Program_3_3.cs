@@ -10,8 +10,7 @@ namespace CursoMongoDB.Programs
     {
         public static void Executar()
         {
-            var connectionString =
-                "mongodb+srv://cauaaguiarti_db_user:zxX0IrVFIeNfJI6O@clusterteste.x2ruob5.mongodb.net/";
+            var connectionString = Configuracao.ConnectionString;
             var client = new MongoClient(connectionString);
             var database = client.GetDatabase("NoticiasDB");
             var collection = database.GetCollection<BsonDocument>("noticias");

@@ -84,6 +84,13 @@ public class Comentario
     public int Curtidas { get; set; }
     public string Usuario { get; set; }
     public DateTime Data { get; set; }
+
+    // Permite ler JSONs que usam "Comentario" em vez de "Texto" (ex.: arquivos do curso)
+    [JsonProperty("Comentario")]
+    private string ComentarioLegado
+    {
+        set => Texto = value;
+    }
 }
 
 public class Anexo
