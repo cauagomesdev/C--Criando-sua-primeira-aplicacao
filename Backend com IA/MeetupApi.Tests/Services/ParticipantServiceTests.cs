@@ -110,6 +110,43 @@ public class ParticipantServiceTests
         _participantRepository.Verify(r => r.Save(It.IsAny<Participant>()), Times.Never);
     }
 
+    [Fact]
+    public void DeveLancarExcecaoQuandoAtualizarComEmailDeOutroParticipante()
+    {
+        // Arrange
+        Participant participante = CriarParticipante();
+        var outroParticipante = new Participant("Bruno Lima", "bruno@email.com");
+        SetId(outroParticipante, 2L);
+
+        _participantRepository.Setup(r => r.FindById(1L)).Returns(participante);
+        _participantRepository.Setup(r => r.FindByEmail("bruno@email.com")).Returns(outroParticipante);
+
+        // Act
+        Action act = () => _participantService.Atualizar(1L, new ParticipantRequest("Ana Silva", "bruno@email.com"));
+
+        // Assert
+        act.Should().Throw<ConflictException>();
+        _participantRepository.Verify(r => r.Save(It.IsAny<Participant>()), Times.Never);
+    }
+
+    [Fact]
+    public void DeveAtualizarParticipanteMantendoOProprioEmail()
+    {
+        // Arrange
+        Participant participante = CriarParticipante();
+
+        _participantRepository.Setup(r => r.FindById(1L)).Returns(participante);
+        _participantRepository.Setup(r => r.FindByEmail("ana@email.com")).Returns(participante);
+        _participantRepository.Setup(r => r.Save(participante)).Returns(participante);
+
+        // Act
+        ParticipantResponse response = _participantService.Atualizar(1L, new ParticipantRequest("Ana Souza", "ana@email.com"));
+
+        // Assert
+        response.Nome.Should().Be("Ana Souza");
+        _participantRepository.Verify(r => r.Save(participante), Times.Once);
+    }
+
     // -------------------------------------------------------------------------
     // DELEÇÃO — SUCESSO
     // -------------------------------------------------------------------------

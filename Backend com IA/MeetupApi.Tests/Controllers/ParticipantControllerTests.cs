@@ -113,6 +113,24 @@ public class ParticipantControllerTests : IDisposable
         body!.Mensagem.Should().NotBeNullOrEmpty();
     }
 
+    [Fact]
+    public async Task DeveRetornar409AoAtualizarComEmailDeOutroParticipante()
+    {
+        // Arrange
+        Participant participante = SalvarParticipante(new Participant("Ana Silva", "ana@email.com"));
+        SalvarParticipante(new Participant("Bruno Lima", "bruno@email.com"));
+
+        // Act
+        HttpResponseMessage response = await _client.PutAsJsonAsync(
+            $"/api/participantes/{participante.Id}",
+            new ParticipantRequest("Ana Silva", "bruno@email.com"), Json);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Conflict);
+        ErrorResponse? body = await response.Content.ReadFromJsonAsync<ErrorResponse>(Json);
+        body!.Mensagem.Should().NotBeNullOrEmpty();
+    }
+
     // -------------------------------------------------------------------------
     // DELETE /api/participantes/{id}
     // -------------------------------------------------------------------------
