@@ -1,0 +1,30 @@
+# Build output — rebuilt inside the container
+**/bin/
+**/obj/
+out/
+publish/
+
+# Version control
+.git/
+.gitignore
+
+# Cursor IDE and dev container configuration
+.cursor/
+.devcontainer/
+
+# Tests — not needed in the runtime image
+MeetupApi.Tests/
+TestResults/
+
+# Documentation
+*.md
+*.txt
+
+# Environment secrets — never send to build context
+.env
+.env.local
+.env.*.local
+
+# OS metadata
+.DS_Store
+Thumbs.db

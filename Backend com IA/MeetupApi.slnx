@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="MeetupApi.Web/MeetupApi.Web.csproj" />
+  <Project Path="MeetupApi.Tests/MeetupApi.Tests.csproj" />
+</Solution>

@@ -1,0 +1,41 @@
+# Build output
+bin/
+obj/
+out/
+publish/
+
+# dotnet CLI / NuGet
+*.nupkg
+*.snupkg
+project.lock.json
+*.binlog
+
+# Test results and coverage
+TestResults/
+coverage*.json
+coverage*.xml
+*.trx
+
+# IDE files
+.idea/
+.vs/
+.vscode/*
+!.vscode/extensions.json
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Local environment
+.env
+.env.local
+
+# NOTE: .devcontainer/ and .cursor/ are intentionally versioned

@@ -1,0 +1,66 @@
+---
+description: REST API conventions — HTTP status codes, validation, error handling
+globs: **/*.cs
+alwaysApply: false
+---
+
+# REST API Conventions
+
+## HTTP Status Codes
+| Situation | Code |
+|---|---|
+| Resource created | `201 Created` (with `Location` header) |
+| Successful with no body | `204 No Content` |
+| Resource not found | `404 Not Found` |
+| Duplicate / conflict | `409 Conflict` |
+| Validation error | `422 Unprocessable Entity` |
+| Generic success | `200 OK` |
+
+```csharp
+// ✅ GOOD
+[HttpPost]
+public ActionResult<EventResponse> CriarEvento([FromBody] EventRequest request)
+{
+    var response = _eventService.CriarEvento(request);
+    return CreatedAtAction(nameof(BuscarPorId), new { id = response.Id }, response);
+}
+
+[HttpDelete("{id}")]
+public IActionResult DeletarEvento(long id)
+{
+    _eventService.DeletarEvento(id);
+    return NoContent();
+}
+```
+
+## Validation
+Use DataAnnotations on record DTOs. `[ApiController]` validates ModelState automatically —
+configure `InvalidModelStateResponseFactory` to return `422 Unprocessable Entity` with an
+`ErrorResponse` body instead of the default 400.
+
+```csharp
+public record EventRequest(
+    [Required(AllowEmptyStrings = false)] string Titulo,
+    string? Descricao,
+    [Required] DateTime? DataHora,
+    string? Local,
+    [Required][Range(1, int.MaxValue)] int? LimiteVagas);
+```
+
+Put validation attributes on the **constructor parameters** (no `property:` target):
+ASP.NET Core validates positional records through their parameters and rejects
+`[property: ...]` validation attributes on them. Use nullable types (`DateTime?`, `int?`)
+for required value types; otherwise `[Required]` never fails, because the default
+(`0`, `DateTime.MinValue`) is bound when the field is missing.
+
+## Centralized Error Handling
+Use a single exception-handling middleware — never catch domain exceptions in controllers.
+
+- `ResourceNotFoundException` → 404
+- `ConflictException` → 409
+- `ArgumentException` → 422
+- Any other `Exception` → 500 with generic message
+
+## Response Format
+All responses must be JSON (camelCase, Portuguese domain attributes). Error body is
+`{ "mensagem": "..." }`. Never return plain strings from controllers.

@@ -1,0 +1,42 @@
+---
+description: Project stack, architecture layers, and configuration conventions
+alwaysApply: true
+---
+
+# MeetUp API — Project Stack & Architecture
+
+## Stack
+- .NET 10 + ASP.NET Core Web API (controllers) + Entity Framework Core
+- Database: MySQL via `Pomelo.EntityFrameworkCore.MySql`
+- Tests: xUnit + Moq + FluentAssertions (unit) | WebApplicationFactory + SQLite in-memory (integration)
+- **SQLite in-memory is used ONLY in tests — never in the application**
+- Configuration via `appsettings.json` + environment variables (`ConnectionStrings__DefaultConnection`)
+
+## Layered Architecture
+```
+Controller → Service → Repository (class + interface, DbContext underneath)
+```
+- Controllers handle HTTP only — no business logic
+- Services own all business rules
+- Repositories are classes with interfaces that encapsulate the `DbContext` — no LINQ queries in services
+
+## Naming
+- Class names and method names: **English** for classes, domain verbs may stay in Portuguese when mirroring the ubiquitous language (`CriarEvento`, `Inscrever`)
+- Domain attribute names in DTOs (request/response): **Portuguese** (`titulo`, `descricao`, `dataHora`, `local`, `limiteVagas`)
+- Entity properties: **English**, mapped to Portuguese columns/tables via `HasColumnName`/`ToTable` in `OnModelCreating`
+
+```csharp
+// ✅ Entity property in English → column in Portuguese (OnModelCreating)
+builder.Property(e => e.Title).HasColumnName("titulo").IsRequired();
+
+// ✅ DTO attribute in Portuguese (serialized as camelCase JSON: titulo, dataHora)
+public record EventRequest([Required] string Titulo, string Descricao, [Required] DateTime DataHora);
+```
+
+## Other rules
+- DTOs are C# `record`s — no boilerplate classes with getters/setters
+- Entities have explicit constructors (parameterless + full) — no records for entities
+- Validation with DataAnnotations (`[Required]`, `[EmailAddress]`, `[Range]`) + ModelState
+- Centralized error handling in an exception middleware — never try/catch in controllers
+- Dependency injection by constructor, registered in `Program.cs`
+- All API responses are JSON with semantic HTTP status codes
