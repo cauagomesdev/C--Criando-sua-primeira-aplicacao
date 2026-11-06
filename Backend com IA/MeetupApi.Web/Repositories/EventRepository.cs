@@ -15,25 +15,28 @@ public class EventRepository : IEventRepository
 
     public Event? FindById(long id) =>
         _context.Events
-            .Include(e => e.Registrations)
-            .FirstOrDefault(e => e.Id == id);
+            .Include(@event => @event.Registrations)
+            .FirstOrDefault(@event => @event.Id == id);
+
+    public bool ExistsById(long id) =>
+        _context.Events.Any(@event => @event.Id == id);
 
     public List<Event> FindAll() =>
         _context.Events
-            .Include(e => e.Registrations)
+            .Include(@event => @event.Registrations)
             .ToList();
 
     public List<Event> FindByDateTimeAfterOrderByDateTimeAsc(DateTime dateTime) =>
         _context.Events
-            .Include(e => e.Registrations)
-            .Where(e => e.DateTime > dateTime)
-            .OrderBy(e => e.DateTime)
+            .Include(@event => @event.Registrations)
+            .Where(@event => @event.DateTime > dateTime)
+            .OrderBy(@event => @event.DateTime)
             .ToList();
 
     public List<Event> FindByLocationContainingIgnoreCase(string location) =>
         _context.Events
-            .Include(e => e.Registrations)
-            .Where(e => e.Location.ToLower().Contains(location.ToLower()))
+            .Include(@event => @event.Registrations)
+            .Where(@event => @event.Location.ToLower().Contains(location.ToLower()))
             .ToList();
 
     public Event Save(Event @event)

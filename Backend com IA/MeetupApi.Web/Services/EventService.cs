@@ -9,17 +9,21 @@ public class EventService
 {
     private readonly ILogger<EventService> _logger;
     private readonly IEventRepository _eventRepository;
+    private readonly TimeProvider _timeProvider;
 
-    public EventService(ILogger<EventService> logger, IEventRepository eventRepository)
+    public EventService(ILogger<EventService> logger, IEventRepository eventRepository, TimeProvider timeProvider)
     {
         _logger = logger;
         _eventRepository = eventRepository;
+        _timeProvider = timeProvider;
     }
+
+    private DateTime CurrentTime => _timeProvider.GetLocalNow().DateTime;
 
     public EventResponse CriarEvento(EventRequest request)
     {
         _logger.LogDebug("Iniciando criação de evento: {Titulo}", request.Titulo);
-        if (request.DataHora!.Value < DateTime.Now)
+        if (request.DataHora!.Value < CurrentTime)
         {
             throw new ArgumentException("A data do evento não pode ser no passado");
         }
@@ -59,7 +63,7 @@ public class EventService
 
     public List<EventResponse> ListarProximosEventos()
     {
-        return _eventRepository.FindByDateTimeAfterOrderByDateTimeAsc(DateTime.Now)
+        return _eventRepository.FindByDateTimeAfterOrderByDateTimeAsc(CurrentTime)
             .Select(ToResponse)
             .ToList();
     }
@@ -69,6 +73,18 @@ public class EventService
         _logger.LogDebug("Iniciando atualização do evento id={Id}", id);
         Event @event = _eventRepository.FindById(id)
             ?? throw new ResourceNotFoundException($"Evento não encontrado com id: {id}");
+
+        if (request.DataHora!.Value < CurrentTime)
+        {
+            throw new ArgumentException("A data do evento não pode ser no passado");
+        }
+
+        int activeRegistrations = CountActiveRegistrations(@event);
+        if (request.LimiteVagas!.Value < activeRegistrations)
+        {
+            throw new ConflictException(
+                $"O limite de vagas não pode ser menor que o número de inscrições ativas ({activeRegistrations})");
+        }
 
         @event.Title = request.Titulo;
         @event.Description = request.Descricao ?? string.Empty;
@@ -90,10 +106,12 @@ public class EventService
         _logger.LogInformation("Evento deletado com id={Id}", id);
     }
 
+    private static int CountActiveRegistrations(Event @event) =>
+        @event.Registrations.Count(registration => registration.Status == RegistrationStatus.ATIVA);
+
     private static EventResponse ToResponse(Event @event)
     {
-        int activeRegistrations = @event.Registrations
-            .Count(r => r.Status == RegistrationStatus.ATIVA);
+        int activeRegistrations = CountActiveRegistrations(@event);
 
         return new EventResponse(
             @event.Id,

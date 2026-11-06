@@ -30,6 +30,8 @@ builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IParticipantRepository, ParticipantRepository>();
 builder.Services.AddScoped<IRegistrationRepository, RegistrationRepository>();
 
+builder.Services.AddSingleton(TimeProvider.System);
+
 builder.Services.AddScoped<EventService>();
 builder.Services.AddScoped<ParticipantService>();
 builder.Services.AddScoped<RegistrationService>();
