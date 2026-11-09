@@ -4,14 +4,6 @@
   "service": "app",
   "workspaceFolder": "/workspaces",
 
-  "features": {
-    "ghcr.io/devcontainers/features/git:1": {},
-    "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
-      "moby": false
-    }
-  },
-
   "customizations": {
     "vscode": {
       "extensions": [
@@ -38,5 +30,5 @@
     "MYSQL_DATABASE": "meetup_db"
   },
 
-  "postCreateCommand": "dotnet restore"
+  "postCreateCommand": "sudo chown -R vscode:vscode MeetupApi.Web/bin MeetupApi.Web/obj MeetupApi.Tests/bin MeetupApi.Tests/obj && dotnet restore"
 }

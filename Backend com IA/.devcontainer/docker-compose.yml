@@ -1,10 +1,20 @@
 services:
   app:
-    image: mcr.microsoft.com/devcontainers/dotnet:1-10.0
+    image: mcr.microsoft.com/devcontainers/dotnet:10.0
     command: sleep infinity
+    environment:
+      # O MySQL roda em outro container: o host é o nome do serviço, não localhost.
+      # A variável sobrescreve a connection string do appsettings.Development.json.
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=meetup_db;User=root;Password=root"
     volumes:
       - ..:/workspaces:cached
-      - /var/run/docker.sock:/var/run/docker.sock
+      # bin/obj próprios do container: os arquivos gerados pelo build no Windows
+      # não podem ser alterados pelo usuário vscode (erro MSB3374) e misturar os
+      # dois builds (Windows/Linux) corrompe o restore.
+      - web-bin:/workspaces/MeetupApi.Web/bin
+      - web-obj:/workspaces/MeetupApi.Web/obj
+      - tests-bin:/workspaces/MeetupApi.Tests/bin
+      - tests-obj:/workspaces/MeetupApi.Tests/obj
     depends_on:
       mysql:
         condition: service_healthy
@@ -29,6 +39,10 @@ services:
 
 volumes:
   mysql-data:
+  web-bin:
+  web-obj:
+  tests-bin:
+  tests-obj:
 
 networks:
   devcontainer-net:
