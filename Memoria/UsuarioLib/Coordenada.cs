@@ -2,9 +2,8 @@
 
 namespace UsuarioLib;
 
-public class Coordenada
+public struct Coordenada
 {
-
     public Coordenada(double latitude, double longitude)
     {
         Latitude = latitude;
@@ -13,7 +12,6 @@ public class Coordenada
 
     public double Latitude;
     public double Longitude;
-
 
     public override string ToString()
     {
