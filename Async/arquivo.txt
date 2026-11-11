@@ -1,0 +1,5 @@
+1;Brasilia;Recife;2000;10000
+2;Vitória;São Paulo;2500;15000
+3;Salvador;Florianópolis;3000;20000
+4;Rio de Janeiro;Curitiba;1800;12000
+5;Fortaleza;Belo Horizonte;2200;13000

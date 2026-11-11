@@ -1,0 +1,14 @@
+1;Brasilia;Recife;2000;10000
+2;Vitória;São Paulo;2500;15000
+3;Salvador;Florianópolis;3000;20000
+4;Rio de Janeiro;Curitiba;1800;12000
+5;Fortaleza;Belo Horizonte;2200;13000
+6;São Paulo;Rio de Janeiro;400;8000
+7;Brasília;Salvador;1500;9500
+8;Manaus;Curitiba;3500;11500
+9;Recife;Porto Alegre;2900;10500
+10;Goiânia;Belém;1700;8700
+11;Rio de Janeiro;Brasília;1200;9000
+12;São Luís;Fortaleza;800;7500
+13;Belo Horizonte;Manaus;3200;11000
+14;Curitiba;Goiânia;1800;8800
