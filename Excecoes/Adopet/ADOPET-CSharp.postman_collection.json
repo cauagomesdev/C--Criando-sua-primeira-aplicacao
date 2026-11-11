@@ -1,0 +1,271 @@
+{
+  "info": {
+    "name": "ADOPET (C#)",
+    "description": "Coleção da API Adopet do curso de exceções em C# (Excecoes/Adopet). Adaptada da coleção do curso Java 3349: rotas, porta e campos ajustados para a API C#. Altere a variável baseUrl se rodar em outra porta (perfil https: https://localhost:7062).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5241",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "TUTOR",
+      "item": [
+        {
+          "name": "Listar tutores",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/Tutor",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "Tutor"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cadastrar tutor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/Tutor",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "Tutor"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Fulano da Silva\",\n    \"email\": \"fulano@email.com.br\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "PET",
+      "item": [
+        {
+          "name": "Listar pets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/Pet",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "Pet"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cadastrar pet",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/Pet",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "Pet"
+              ]
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "Nome",
+                  "value": "Bidu",
+                  "type": "text"
+                },
+                {
+                  "key": "Idade",
+                  "value": "5",
+                  "type": "text"
+                },
+                {
+                  "key": "Tipo",
+                  "value": "Cachorro",
+                  "type": "text",
+                  "description": "Gato ou Cachorro"
+                },
+                {
+                  "key": "Imagem",
+                  "type": "file",
+                  "src": [],
+                  "description": "Selecione uma imagem (.jpg/.png) do seu computador"
+                }
+              ]
+            },
+            "description": "Envia como form-data. Antes de enviar, clique em 'Select Files' no campo Imagem e escolha uma imagem."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "ADOCAO",
+      "item": [
+        {
+          "name": "Listar adoções",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/Adocao",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "Adocao"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar adoção por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/Adocao/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "Adocao",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Solicitar adoção",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/Adocao",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "Adocao"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"idPet\": 1,\n    \"idTutor\": 1,\n    \"motivo\": \"Motivo qualquer\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Aprovar adoção",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/Adocao/aprovar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "Adocao",
+                "aprovar"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"idAdocao\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reprovar adoção",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/Adocao/reprovar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "Adocao",
+                "reprovar"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"idAdocao\": 1,\n    \"justificativa\": \"Justificativa qualquer\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
