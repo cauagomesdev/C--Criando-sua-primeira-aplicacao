@@ -1,4 +1,5 @@
 ﻿using Adopet.Dtos;
+using Adopet.Exceptions;
 using Adopet.Services;
 using Microsoft.AspNetCore.Mvc;
 

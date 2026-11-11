@@ -1,4 +1,5 @@
 ﻿using Adopet.Dtos;
+using Adopet.Exceptions;
 using Adopet.Models;
 using Adopet.Models.Enums;
 using Adopet.Repositories;
@@ -10,7 +11,12 @@ public class AdocaoService
     private readonly PetRepository _petRepository;
     private readonly TutorRepository _tutorRepository;
     private readonly AdocaoRepository _adocaoRepository;
-    public AdocaoService(PetRepository petRepository, TutorRepository tutorRepository, AdocaoRepository adocaoRepository)
+
+    public AdocaoService(
+        PetRepository petRepository,
+        TutorRepository tutorRepository,
+        AdocaoRepository adocaoRepository
+    )
     {
         _petRepository = petRepository;
         _tutorRepository = tutorRepository;
@@ -33,6 +39,28 @@ public class AdocaoService
         var pet = _petRepository.GetById(dto.IdPet);
         var tutor = _tutorRepository.GetById(dto.IdTutor);
 
+        if (pet == null || tutor == null)
+        {
+            throw new NullReferenceException();
+        }
+        if (pet.Adotado)
+        {
+            throw new PetAdotadoException("Pet já foi adotado!", new ApplicationException());
+        }
+        if (_adocaoRepository.ExistsByPetIdAndStatus(pet.Id, StatusAdocao.AGUARDANDO_AVALIACAO))
+        {
+            throw new PetEmProcessoDeAdocaoException("Pet já está em processo de adoção!");
+        }
+        var numeroDeAdocoesDoTutor = _adocaoRepository.CountByTutorIdAndStatus(
+            tutor.Id,
+            StatusAdocao.APROVADO
+        );
+        if (numeroDeAdocoesDoTutor >= 2)
+        {
+            throw new TutorComLimiteAtingidoException(
+                "Tutor já atingiu o limite de adoções aprovadas!"
+            );
+        }
         _adocaoRepository.Add(new Adocao(tutor, pet, dto.Motivo));
     }
 

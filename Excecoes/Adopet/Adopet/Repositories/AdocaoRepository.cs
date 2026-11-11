@@ -36,7 +36,7 @@ public class AdocaoRepository
 
     public int CountByTutorIdAndStatus(long idTutor, StatusAdocao status)
     {
-        return _dbContext.Adocoes.Count(a => a.Pet.Id == idTutor && a.Status == status);
+        return _dbContext.Adocoes.Count(a => a.TutorId == idTutor && a.Status == status);
     }
 
     public void SaveChanges()

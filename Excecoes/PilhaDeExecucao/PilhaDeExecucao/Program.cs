@@ -5,7 +5,7 @@
         Console.WriteLine("[Inicio] - Metodo1");
 
         Metodo2();
-       
+
         Console.WriteLine("[Fim] - Metodo1");
     }
 
@@ -23,15 +23,8 @@
     public static void Main(string[] args)
     {
         Console.WriteLine("[Inicio] - Main");
-        try
-        {
-            Metodo1();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Falha ao chamar método 1" + ex.Message);  
-        }
-        
+
+        Metodo1();
 
         Console.WriteLine("[Fim] - Main");
     }
