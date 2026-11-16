@@ -2,7 +2,7 @@
 {
     private static void Main(string[] args)
     {
-
+        caixaEletronico.OnSaldoInsuficiente += caixaEletronico_OnSaldoInsuficiente;
         new Logo().MostrarBanner();
 
         while (true)
@@ -18,7 +18,16 @@
                 Console.WriteLine("Opção inválida. Tente novamente.");
             }
         }
+    }
 
+    private static void caixaEletronico_OnSaldoInsuficiente(
+        object? sender,
+        SaldoInsuficienteEventArgs e
+    )
+    {
+        Console.WriteLine(
+            $"Saldo insuficiente. Voce tentou sacar {e.Saque}, mas o saldo atual é {e.Saldo}."
+        );
     }
 
     static void MostrarMenu()
@@ -75,7 +84,7 @@
 
     private static void Depositar()
     {
-        transacao = delegate (decimal valor)
+        transacao = delegate(decimal valor)
         {
             caixaEletronico.Depositar(valor);
             caixaEletronico.Saldo();
@@ -88,7 +97,7 @@
 
     private static void Sacar()
     {
-        transacao = delegate (decimal valor)
+        transacao = delegate(decimal valor)
         {
             caixaEletronico.Sacar(valor);
             caixaEletronico.Saldo();
@@ -108,13 +117,13 @@
     {
         TransacaoBancaria depositar = caixaEletronico.Depositar;
         TransacaoBancaria aplicar = caixaEletronico.AplicarPoupanca;
-        TransacaoBancaria saldo = delegate (decimal valor)
+        TransacaoBancaria saldo = delegate(decimal valor)
         {
             caixaEletronico.Saldo();
         };
 
         TransacaoBancaria depositarAplicarSaldo = depositar + aplicar + saldo;
-        
+
         TransacaoBancaria aplicarSaldo = depositarAplicarSaldo - depositar;
 
         aplicarSaldo(50);

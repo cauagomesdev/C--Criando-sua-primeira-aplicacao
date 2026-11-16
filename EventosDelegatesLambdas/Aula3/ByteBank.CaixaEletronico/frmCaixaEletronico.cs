@@ -9,14 +9,18 @@
             InitializeComponent();
             caixaEletronico = new CaixaEletronico();
             ImprimirLogo();
+            btnSacar.Click += BtnSacar_Click;
+            btnDepositar.Click += BtnDepositar_Click;
+            btnSaldo.Click += BtnSaldo_Click;
+            btnExtrato.Click += BtnExtrato_Click;
         }
 
         private void ImprimirLogo()
         {
             txtConsole.Text =
-            "▒█▀▀█ █░░█ ▀▀█▀▀ █▀▀ ▒█▀▀█ █▀▀█ █▀▀▄ █░█\r\n" +
-            "▒█▀▀▄ █▄▄█ ░░█░░ █▀▀ ▒█▀▀▄ █▄▄█ █░░█ █▀▄\r\n" +
-            "▒█▄▄█ ▄▄▄█ ░░▀░░ ▀▀▀ ▒█▄▄█ ▀░░▀ ▀░░▀ ▀░▀\r\n";
+                "▒█▀▀█ █░░█ ▀▀█▀▀ █▀▀ ▒█▀▀█ █▀▀█ █▀▀▄ █░█\r\n"
+                + "▒█▀▀▄ █▄▄█ ░░█░░ █▀▀ ▒█▀▀▄ █▄▄█ █░░█ █▀▄\r\n"
+                + "▒█▄▄█ ▄▄▄█ ░░▀░░ ▀▀▀ ▒█▄▄█ ▀░░▀ ▀░░▀ ▀░▀\r\n";
             txtConsole.SelectionStart = txtConsole.TextLength;
             txtConsole.ScrollToCaret();
         }
@@ -104,6 +108,18 @@
             txtConsole.Text += Environment.NewLine;
             txtConsole.SelectionStart = txtConsole.TextLength;
             txtConsole.ScrollToCaret();
+        }
+
+        private void btnNumero_Click(object sender, EventArgs e)
+        {
+            //1. Obter o objeto do botão que está emitindo o evento
+            Button btn = sender as Button;
+
+            //2. Obter o numeral que o botão representa
+            char numeral = btn.Name.Last();
+
+            //3. Adicionar o numeral ao visor
+            txtValor.Text += numeral;
         }
     }
 }

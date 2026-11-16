@@ -1,20 +1,36 @@
-﻿public class CaixaEletronico
+﻿public class SaldoInsuficienteEventArgs : EventArgs
+{
+    public decimal Saldo { get; }
+    public decimal Saque { get; }
+
+    public SaldoInsuficienteEventArgs(decimal saldo, decimal saque)
+    {
+        Saldo = saldo;
+        Saque = saque;
+    }
+}
+
+public delegate void SaldoInsuficienteEventHandler(object? sender, SaldoInsuficienteEventArgs e);
+
+public class CaixaEletronico : ICaixaEletronico
 {
     private const int LarguraExtrato = 80;
     private decimal saldo;
     private List<ItemExtrato> itensExtrato = new();
+    public event SaldoInsuficienteEventHandler OnSaldoInsuficiente;
 
     public CaixaEletronico()
     {
         saldo = 100;
         var item = new ItemExtrato
-        { 
-            Data = DateTime.Now.AddDays(-2), 
-            Descricao = "Saldo Inicial", 
-            Valor = saldo, 
-            Sinal = SinalOperacao.Credito
+        {
+            Data = DateTime.Now.AddDays(-2),
+            Descricao = "Saldo Inicial",
+            Valor = saldo,
+            Sinal = SinalOperacao.Credito,
         };
         itensExtrato.Add(item);
+        // OnSaldoInsuficiente += MostrarSaldoInsuficiente;
     }
 
     public void Saldo()
@@ -43,7 +59,7 @@
             Data = DateTime.Now,
             Descricao = "Depósito",
             Valor = valor,
-            Sinal = SinalOperacao.Credito
+            Sinal = SinalOperacao.Credito,
         };
 
         ImprimirCabecalho();
@@ -55,7 +71,8 @@
     {
         if (valor > saldo)
         {
-            Console.WriteLine("Saldo insuficiente.");
+            // MostrarSaldoInsuficiente();
+            OnSaldoInsuficiente?.Invoke(this, new SaldoInsuficienteEventArgs(saldo, valor));
         }
         else
         {
@@ -65,7 +82,7 @@
                 Data = DateTime.Now,
                 Descricao = "Saque",
                 Valor = valor,
-                Sinal = SinalOperacao.Debito
+                Sinal = SinalOperacao.Debito,
             };
 
             ImprimirCabecalho();
@@ -74,11 +91,17 @@
         }
     }
 
+    private static void MostrarSaldoInsuficiente()
+    {
+        Console.WriteLine("Saldo insuficiente.");
+    }
+
     public void AplicarPoupanca(decimal valor)
     {
         if (valor > saldo)
         {
-            Console.WriteLine("Saldo insuficiente.");
+            // MostrarSaldoInsuficiente();
+            OnSaldoInsuficiente?.Invoke(this, new SaldoInsuficienteEventArgs(saldo, valor));
         }
         else
         {
@@ -88,7 +111,7 @@
                 Data = DateTime.Now,
                 Descricao = "Aplicação em Poupança",
                 Valor = valor,
-                Sinal = SinalOperacao.Debito
+                Sinal = SinalOperacao.Debito,
             };
 
             ImprimirCabecalho();
@@ -99,9 +122,8 @@
 
     private static void ImprimirItemExtrato(ItemExtrato item)
     {
-        Console.ForegroundColor = item.Sinal == SinalOperacao.Credito
-            ? ConsoleColor.Green
-            : ConsoleColor.Red;
+        Console.ForegroundColor =
+            item.Sinal == SinalOperacao.Credito ? ConsoleColor.Green : ConsoleColor.Red;
         Console.WriteLine(item);
         Console.ForegroundColor = ConsoleColor.White;
     }
@@ -142,5 +164,5 @@ public class ItemExtrato
 public enum SinalOperacao
 {
     Credito = 1,
-    Debito = -1
+    Debito = -1,
 }
