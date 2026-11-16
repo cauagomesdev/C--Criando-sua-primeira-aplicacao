@@ -8,5 +8,7 @@
         string Extrato();
 
         event SaldoInsuficienteEventHandler OnSaldoInsuficiente;
+
+        event LimiteUtilizadoEventHandler OnLimiteUtilizado;
     }
 }

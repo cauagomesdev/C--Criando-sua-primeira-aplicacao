@@ -5,12 +5,14 @@ namespace ByteBank.CaixaEletronico
     public class CaixaEletronico : ICaixaEletronico
     {
         private const int LarguraExtrato = 65;
+        private const decimal Limite = 500;
         private decimal saldo;
         private List<ItemExtrato> itensExtrato = new();
 
         public event SaldoInsuficienteEventHandler OnSaldoInsuficiente;
         public event DepositoEventHandler OnDeposito;
         public event SaqueEventHandler OnSaque;
+        public event LimiteUtilizadoEventHandler OnLimiteUtilizado;
 
         public CaixaEletronico()
         {
@@ -20,15 +22,14 @@ namespace ByteBank.CaixaEletronico
                 Data = DateTime.Now.AddDays(-2),
                 Descricao = "Saldo Inicial",
                 Valor = saldo,
-                Sinal = SinalOperacao.Credito
+                Sinal = SinalOperacao.Credito,
             };
             itensExtrato.Add(item);
         }
 
-        public decimal Saldo()
-        {
-            return saldo;
-        }
+        public decimal Saldo => saldo;
+
+        public decimal DisponivelParaSaque => saldo + Limite;
 
         public string Extrato()
         {
@@ -52,7 +53,7 @@ namespace ByteBank.CaixaEletronico
                 Data = DateTime.Now,
                 Descricao = "Depósito",
                 Valor = valor,
-                Sinal = SinalOperacao.Credito
+                Sinal = SinalOperacao.Credito,
             };
 
             itensExtrato.Add(item);
@@ -61,30 +62,34 @@ namespace ByteBank.CaixaEletronico
 
         public void Sacar(decimal valor)
         {
+            if (valor > DisponivelParaSaque)
+            {
+                OnLimiteUtilizado?.Invoke(this, new TransacaoEventArgs(DisponivelParaSaque, valor));
+                return;
+            }
             if (valor > saldo)
             {
-                OnSaldoInsuficiente?.Invoke(this, new TransacaoEventArgs(saldo, valor));
+                OnLimiteUtilizado?.Invoke(this, new TransacaoEventArgs(saldo, valor));
             }
-            else
+            saldo -= valor;
+            var item = new ItemExtrato
             {
-                saldo -= valor;
-                var item = new ItemExtrato
-                {
-                    Data = DateTime.Now,
-                    Descricao = "Saque",
-                    Valor = valor,
-                    Sinal = SinalOperacao.Debito
-                };
+                Data = DateTime.Now,
+                Descricao = "Saque",
+                Valor = valor,
+                Sinal = SinalOperacao.Debito,
+            };
 
-                itensExtrato.Add(item);
-                OnSaque?.Invoke(this, new TransacaoEventArgs(saldo, valor));
-            }
+            itensExtrato.Add(item);
+            OnSaque?.Invoke(this, new TransacaoEventArgs(saldo, valor));
         }
 
         private void ImprimirCabecalho(StringBuilder stringBuilder)
         {
             stringBuilder.AppendLine(new string('=', LarguraExtrato));
-            stringBuilder.AppendLine(string.Format("{0,-20} {1,-25} {2,18}", "Data/Hora", "Descrição", "Valor (R$)"));
+            stringBuilder.AppendLine(
+                string.Format("{0,-20} {1,-25} {2,18}", "Data/Hora", "Descrição", "Valor (R$)")
+            );
             stringBuilder.AppendLine(new string('=', LarguraExtrato));
         }
 
@@ -97,7 +102,9 @@ namespace ByteBank.CaixaEletronico
         {
             stringBuilder.AppendLine(new string('=', LarguraExtrato));
             string valor = saldo.ToString("N2").PadLeft(18);
-            stringBuilder.AppendLine(string.Format("{0,-20} {1,-25} {2,18}", string.Empty, "Saldo", valor));
+            stringBuilder.AppendLine(
+                string.Format("{0,-20} {1,-25} {2,18}", string.Empty, "Saldo", valor)
+            );
             stringBuilder.AppendLine(new string('=', LarguraExtrato));
         }
     }
@@ -106,6 +113,7 @@ namespace ByteBank.CaixaEletronico
     public delegate void DepositoEventHandler(object sender, TransacaoEventArgs e);
     public delegate void SaqueEventHandler(object sender, TransacaoEventArgs e);
     public delegate void SaldoInsuficienteEventHandler(object sender, TransacaoEventArgs e);
+    public delegate void LimiteUtilizadoEventHandler(object sender, TransacaoEventArgs e);
 }
 
 public class ItemExtrato
@@ -128,5 +136,5 @@ public class ItemExtrato
 public enum SinalOperacao
 {
     Credito = 1,
-    Debito = -1
+    Debito = -1,
 }

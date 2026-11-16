@@ -13,6 +13,28 @@
             btnDepositar.Click += BtnDepositar_Click;
             btnSaldo.Click += BtnSaldo_Click;
             btnExtrato.Click += BtnExtrato_Click;
+
+            btn0.Click += btnNumero_Click;
+            btn1.Click += btnNumero_Click;
+            btn2.Click += btnNumero_Click;
+            btn3.Click += btnNumero_Click;
+            btn4.Click += btnNumero_Click;
+            btn5.Click += btnNumero_Click;
+            btn6.Click += btnNumero_Click;
+            btn7.Click += btnNumero_Click;
+            btn8.Click += btnNumero_Click;
+            btn9.Click += btnNumero_Click;
+
+            caixaEletronico.OnDeposito += CaixaEletronico_OnDeposito;
+            caixaEletronico.OnSaque += CaixaEletronico_OnSaque;
+            caixaEletronico.OnSaldoInsuficiente += CaixaEletronico_OnSaldoInsuficiente;
+        }
+
+        private void CaixaEletronico_OnSaldoInsuficiente(object sender, TransacaoEventArgs e)
+        {
+            string mensagem =
+                $"Saldo insuficiente. Você tentou sacar {e.ValorTransacao:C} mas seu saldo é de {e.Saldo:C}!";
+            WriteToConsole(mensagem);
         }
 
         private void ImprimirLogo()

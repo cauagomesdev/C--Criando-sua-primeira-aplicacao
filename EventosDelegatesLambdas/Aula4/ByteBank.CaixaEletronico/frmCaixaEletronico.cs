@@ -8,10 +8,33 @@
         {
             InitializeComponent();
             caixaEletronico = new CaixaEletronico();
-            caixaEletronico.OnDeposito += CaixaEletronico_OnDeposito;
-            caixaEletronico.OnSaque += CaixaEletronico_OnSaque;
-            caixaEletronico.OnSaldoInsuficiente += CaixaEletronico_OnSaldoInsuficiente;
 
+            caixaEletronico.OnDeposito += (sender, e) =>
+            {
+                string mensagem = $"Depósito de {e.ValorTransacao:C} realizado com sucesso!";
+                WriteToConsole(mensagem);
+                txtValor.Text = string.Empty;
+            };
+
+            caixaEletronico.OnSaque += (sender, e) =>
+            {
+                string mensagem = $"Saque de {e.ValorTransacao:C} realizado com sucesso!";
+                WriteToConsole(mensagem);
+                txtValor.Text = string.Empty;
+            };
+
+            caixaEletronico.OnSaldoInsuficiente += (sender, e) =>
+            {
+                WriteToConsole("Saldo insuficiente!");
+                txtValor.Text = string.Empty;
+            };
+
+            caixaEletronico.OnLimiteUtilizado += (sender, e) =>
+            {
+                WriteToConsole(
+                    "Atenção, você está utilizando o limite disponivel para a sua conta!"
+                );
+            };
             ImprimirLogo();
 
             btnSacar.Click += BtnSacar_Click;
@@ -26,9 +49,9 @@
         private void ImprimirLogo()
         {
             txtConsole.Text =
-            "▒█▀▀█ █░░█ ▀▀█▀▀ █▀▀ ▒█▀▀█ █▀▀█ █▀▀▄ █░█\r\n" +
-            "▒█▀▀▄ █▄▄█ ░░█░░ █▀▀ ▒█▀▀▄ █▄▄█ █░░█ █▀▄\r\n" +
-            "▒█▄▄█ ▄▄▄█ ░░▀░░ ▀▀▀ ▒█▄▄█ ▀░░▀ ▀░░▀ ▀░▀\r\n";
+                "▒█▀▀█ █░░█ ▀▀█▀▀ █▀▀ ▒█▀▀█ █▀▀█ █▀▀▄ █░█\r\n"
+                + "▒█▀▀▄ █▄▄█ ░░█░░ █▀▀ ▒█▀▀▄ █▄▄█ █░░█ █▀▄\r\n"
+                + "▒█▄▄█ ▄▄▄█ ░░▀░░ ▀▀▀ ▒█▄▄█ ▀░░▀ ▀░░▀ ▀░▀\r\n";
             txtConsole.SelectionStart = txtConsole.TextLength;
             txtConsole.ScrollToCaret();
         }
@@ -39,25 +62,6 @@
             {
                 e.Handled = true;
             }
-        }
-
-        private void CaixaEletronico_OnSaldoInsuficiente(object sender, TransacaoEventArgs e)
-        {
-            WriteToConsole("Saldo insuficiente!");
-        }
-
-        private void CaixaEletronico_OnSaque(object sender, TransacaoEventArgs e)
-        {
-            string mensagem = $"Saque de {e.ValorTransacao:C} realizado com sucesso!";
-            WriteToConsole(mensagem);
-            txtValor.Text = string.Empty;
-        }
-
-        private void CaixaEletronico_OnDeposito(object sender, TransacaoEventArgs e)
-        {
-            string mensagem = $"Depósito de {e.ValorTransacao:C} realizado com sucesso!";
-            WriteToConsole(mensagem);
-            txtValor.Text = string.Empty;
         }
 
         private void BtnNumero_Click(object sender, EventArgs e)
