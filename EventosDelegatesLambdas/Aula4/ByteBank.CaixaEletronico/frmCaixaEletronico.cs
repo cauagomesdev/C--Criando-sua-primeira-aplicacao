@@ -98,7 +98,7 @@
 
         private void BtnSaldo_Click(object sender, EventArgs e)
         {
-            decimal saldo = caixaEletronico.Saldo();
+            decimal saldo = caixaEletronico.Saldo;
             WriteToConsole($"Saldo atual: {saldo:C}");
         }
 

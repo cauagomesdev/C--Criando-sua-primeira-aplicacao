@@ -8,7 +8,20 @@ namespace ByteBank.CaixaEletronico
         private const decimal Limite = 500;
         private decimal saldo;
         private List<ItemExtrato> itensExtrato = new();
-
+        private Func<string, decimal, SinalOperacao, ItemExtrato> criarItemExtrato = (
+            descricao,
+            valor,
+            sinal
+        ) =>
+        {
+            return new ItemExtrato
+            {
+                Data = DateTime.Now,
+                Descricao = descricao,
+                Valor = valor,
+                Sinal = sinal,
+            };
+        };
         public event SaldoInsuficienteEventHandler OnSaldoInsuficiente;
         public event DepositoEventHandler OnDeposito;
         public event SaqueEventHandler OnSaque;
@@ -17,13 +30,14 @@ namespace ByteBank.CaixaEletronico
         public CaixaEletronico()
         {
             saldo = 100;
-            var item = new ItemExtrato
-            {
-                Data = DateTime.Now.AddDays(-2),
-                Descricao = "Saldo Inicial",
-                Valor = saldo,
-                Sinal = SinalOperacao.Credito,
-            };
+            // var item = new ItemExtrato
+            // {
+            //     Data = DateTime.Now.AddDays(-2),
+            //     Descricao = "Saldo Inicial",
+            //     Valor = saldo,
+            //     Sinal = SinalOperacao.Credito,
+            // };
+            var item = criarItemExtrato("Saldo Inicial", saldo, SinalOperacao.Credito);
             itensExtrato.Add(item);
         }
 
@@ -48,14 +62,15 @@ namespace ByteBank.CaixaEletronico
         public void Depositar(decimal valor)
         {
             saldo += valor;
-            var item = new ItemExtrato
-            {
-                Data = DateTime.Now,
-                Descricao = "Depósito",
-                Valor = valor,
-                Sinal = SinalOperacao.Credito,
-            };
+            // var item = new ItemExtrato
+            // {
+            //     Data = DateTime.Now,
+            //     Descricao = "Depósito",
+            //     Valor = valor,
+            //     Sinal = SinalOperacao.Credito,
+            // };
 
+            var item = criarItemExtrato("Depósito", valor, SinalOperacao.Credito);
             itensExtrato.Add(item);
             OnDeposito?.Invoke(this, new TransacaoEventArgs(saldo, valor));
         }
@@ -64,7 +79,10 @@ namespace ByteBank.CaixaEletronico
         {
             if (valor > DisponivelParaSaque)
             {
-                OnLimiteUtilizado?.Invoke(this, new TransacaoEventArgs(DisponivelParaSaque, valor));
+                OnSaldoInsuficiente?.Invoke(
+                    this,
+                    new TransacaoEventArgs(DisponivelParaSaque, valor)
+                );
                 return;
             }
             if (valor > saldo)
@@ -72,25 +90,32 @@ namespace ByteBank.CaixaEletronico
                 OnLimiteUtilizado?.Invoke(this, new TransacaoEventArgs(saldo, valor));
             }
             saldo -= valor;
-            var item = new ItemExtrato
-            {
-                Data = DateTime.Now,
-                Descricao = "Saque",
-                Valor = valor,
-                Sinal = SinalOperacao.Debito,
-            };
+            // var item = new ItemExtrato
+            // {
+            //     Data = DateTime.Now,
+            //     Descricao = "Saque",
+            //     Valor = valor,
+            //     Sinal = SinalOperacao.Debito,
+            // };
 
+            var item = criarItemExtrato("Saque", valor, SinalOperacao.Debito);
             itensExtrato.Add(item);
             OnSaque?.Invoke(this, new TransacaoEventArgs(saldo, valor));
         }
 
         private void ImprimirCabecalho(StringBuilder stringBuilder)
         {
-            stringBuilder.AppendLine(new string('=', LarguraExtrato));
+            Action<StringBuilder> imprimirSeparador = (sb) =>
+            {
+                stringBuilder.AppendLine(new string('=', LarguraExtrato));
+            };
+            // stringBuilder.AppendLine(new string('=', LarguraExtrato));
+            imprimirSeparador(stringBuilder);
             stringBuilder.AppendLine(
                 string.Format("{0,-20} {1,-25} {2,18}", "Data/Hora", "Descrição", "Valor (R$)")
             );
-            stringBuilder.AppendLine(new string('=', LarguraExtrato));
+            imprimirSeparador(stringBuilder);
+            // stringBuilder.AppendLine(new string('=', LarguraExtrato));
         }
 
         private void ImprimirItemExtrato(StringBuilder stringBuilder, ItemExtrato item)
