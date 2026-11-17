@@ -49,6 +49,31 @@
       "dependsOn": ["Blazor: API", "Blazor: Front"],
       "dependsOrder": "parallel",
       "problemMatcher": []
+    },
+
+    {
+      "label": "Eventos Aula5: WebApi",
+      "type": "shell",
+      "command": "dotnet run --launch-profile WebApplication1",
+      "options": { "cwd": "${workspaceFolder}/EventosDelegatesLambdas/Aula5/ByteBank.WebApi" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "group": "eventos", "panel": "dedicated" }
+    },
+    {
+      "label": "Eventos Aula5: CaixaEletronico",
+      "type": "shell",
+      "command": "dotnet run",
+      "options": { "cwd": "${workspaceFolder}/EventosDelegatesLambdas/Aula5/ByteBank.CaixaEletronico" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "group": "eventos", "panel": "dedicated" }
+    },
+    {
+      "label": "Eventos Aula5: WebApi + CaixaEletronico",
+      "dependsOn": ["Eventos Aula5: WebApi", "Eventos Aula5: CaixaEletronico"],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
     }
   ]
 }

@@ -3,5 +3,25 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": []
+    "configurations": [
+        {
+            "name": "Eventos Aula5: WebApi",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/EventosDelegatesLambdas/Aula5/ByteBank.WebApi/ByteBank.WebApi.csproj"
+        },
+        {
+            "name": "Eventos Aula5: CaixaEletronico",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/EventosDelegatesLambdas/Aula5/ByteBank.CaixaEletronico/ByteBank.CaixaEletronico.csproj"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Eventos Aula5: WebApi + CaixaEletronico",
+            "configurations": ["Eventos Aula5: WebApi", "Eventos Aula5: CaixaEletronico"],
+            "stopAll": true
+        }
+    ]
 }
