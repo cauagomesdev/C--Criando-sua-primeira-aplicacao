@@ -530,9 +530,16 @@ namespace ByteBank.WebApi.Controllers
             // 3. obter um único elemento resultante, ou valor default (null)
             // 4. retornar a conta corrente encontrada, ou null
 
-            return ContasCorrentes
-                .Where(cc => cc.Agencia == agencia && cc.Conta == conta)
-                .SingleOrDefault();
+            // return ContasCorrentes
+            //     .Where(cc => cc.Agencia == agencia && cc.Conta == conta)
+            //     .SingleOrDefault();
+
+            var query =
+                from cc in ContasCorrentes
+                where cc.Agencia == agencia && cc.Conta == conta
+                select cc;
+
+            return query.SingleOrDefault();
         }
     }
 }
