@@ -1,38 +1,76 @@
-﻿using System.Drawing;
-using System;
+﻿using System;
+using System.Drawing;
 
 namespace ByteBank.CaixaEletronico
 {
     public partial class frmCaixaEletronico : Form
     {
-        private readonly CaixaEletronico caixaEletronico;
+        private readonly WebApiClient webApiClient;
+        private const string NumeroAgencia = "007";
+        private const string NumeroConta = "78901-2";
 
         public frmCaixaEletronico()
         {
             InitializeComponent();
-            caixaEletronico = new CaixaEletronico();
-
-            caixaEletronico.OnDeposito += CaixaEletronico_OnDeposito;
-            caixaEletronico.OnSaque += CaixaEletronico_OnSaque;
-            caixaEletronico.OnSaldoInsuficiente += CaixaEletronico_OnSaldoInsuficiente;
+            webApiClient = new WebApiClient();
 
             ImprimirLogo();
 
-            btnSacar.Click += BtnSacar_Click;
+            btnSacar.Click += async (sender, e) =>
+            {
+                if (decimal.TryParse(txtValor.Text, out decimal valorSaque))
+                {
+                    var resposta = await webApiClient.SacarAsync(
+                        NumeroAgencia,
+                        NumeroConta,
+                        valorSaque
+                    );
+                    WriteToConsole(resposta);
+                }
+                else
+                {
+                    WriteToConsole("Valor inválido!");
+                }
+                txtValor.Text = string.Empty;
+            };
 
-            btnDepositar.Click += BtnDepositar_Click;
+            btnDepositar.Click += async (sender, e) =>
+            {
+                if (decimal.TryParse(txtValor.Text, out decimal valorDeposito))
+                {
+                    var resposta = await webApiClient.DepositarAsync(
+                        NumeroAgencia,
+                        NumeroConta,
+                        valorDeposito
+                    );
+                    WriteToConsole(resposta);
+                }
+                else
+                {
+                    WriteToConsole("Valor inválido!");
+                }
+                txtValor.Text = string.Empty;
+            };
 
-            btnSaldo.Click += BtnSaldo_Click;
+            btnSaldo.Click += async (sender, e) =>
+            {
+                decimal saldo = await webApiClient.GetSaldoAsync(NumeroAgencia, NumeroConta);
+                WriteToConsole($"Saldo atual: {saldo:C}");
+            };
 
-            btnExtrato.Click += BtnExtrato_Click;
+            btnExtrato.Click += async (sender, e) =>
+            {
+                string extrato = await webApiClient.GetExtratoAsync(NumeroAgencia, NumeroConta);
+                WriteToConsole(extrato);
+            };
         }
 
         private void ImprimirLogo()
         {
             txtConsole.Text =
-            "▒█▀▀█ █░░█ ▀▀█▀▀ █▀▀ ▒█▀▀█ █▀▀█ █▀▀▄ █░█\r\n" +
-            "▒█▀▀▄ █▄▄█ ░░█░░ █▀▀ ▒█▀▀▄ █▄▄█ █░░█ █▀▄\r\n" +
-            "▒█▄▄█ ▄▄▄█ ░░▀░░ ▀▀▀ ▒█▄▄█ ▀░░▀ ▀░░▀ ▀░▀\r\n";
+                "▒█▀▀█ █░░█ ▀▀█▀▀ █▀▀ ▒█▀▀█ █▀▀█ █▀▀▄ █░█\r\n"
+                + "▒█▀▀▄ █▄▄█ ░░█░░ █▀▀ ▒█▀▀▄ █▄▄█ █░░█ █▀▄\r\n"
+                + "▒█▄▄█ ▄▄▄█ ░░▀░░ ▀▀▀ ▒█▄▄█ ▀░░▀ ▀░░▀ ▀░▀\r\n";
             txtConsole.SelectionStart = txtConsole.TextLength;
             txtConsole.ScrollToCaret();
         }
@@ -68,50 +106,6 @@ namespace ByteBank.CaixaEletronico
         {
             Button btn = sender as Button;
             txtValor.Text += btn.Name.Last();
-        }
-
-        private void BtnSacar_Click(object sender, EventArgs e)
-        {
-            if (decimal.TryParse(txtValor.Text, out decimal valorSaque))
-            {
-                caixaEletronico.Sacar(valorSaque);
-
-                txtValor.Text = string.Empty;
-            }
-            else
-            {
-                WriteToConsole("Valor inválido!");
-                txtValor.Text = string.Empty;
-            }
-        }
-
-        private void BtnDepositar_Click(object sender, EventArgs e)
-        {
-            if (decimal.TryParse(txtValor.Text, out decimal valorDeposito))
-            {
-                caixaEletronico.Depositar(valorDeposito);
-
-                txtValor.Text = string.Empty;
-            }
-            else
-            {
-                WriteToConsole("Valor inválido!");
-                txtValor.Text = string.Empty;
-            }
-        }
-
-        private void BtnSaldo_Click(object sender, EventArgs e)
-        {
-            decimal saldo = caixaEletronico.Saldo;
-            WriteToConsole($"Saldo atual: {saldo:C}");
-        }
-
-
-        private async void BtnExtrato_Click(object? sender, EventArgs e)
-        {
-            string extrato = caixaEletronico.Extrato();
-
-            WriteToConsole(extrato);
         }
 
         private void btn_MouseDown(object sender, MouseEventArgs e)
