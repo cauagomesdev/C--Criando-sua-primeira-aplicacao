@@ -16,6 +16,7 @@ public class ScreenSoundContext: IdentityDbContext<PessoaComAcesso, PerfilDeAces
     public DbSet<Artista> Artistas { get; set; }
     public DbSet<Musica> Musicas { get; set; }
     public DbSet<Genero> Generos { get; set; }
+    public DbSet<AvaliacaoArtista> AvaliacaoArtistas { get; set; }
 
     private string connectionString = "Server=localhost,1433;Database=ScreenSoundV1;User Id=sa;Password=ScreenSound@123;TrustServerCertificate=True;";
 
@@ -45,6 +46,9 @@ public class ScreenSoundContext: IdentityDbContext<PessoaComAcesso, PerfilDeAces
         modelBuilder.Entity<Musica>()
             .HasMany(c => c.Generos)
             .WithMany(c => c.Musicas);
+
+        modelBuilder.Entity<AvaliacaoArtista>()
+            .HasKey(a => new { a.ArtistaId, a.PessoaId });
     }
 
 }
