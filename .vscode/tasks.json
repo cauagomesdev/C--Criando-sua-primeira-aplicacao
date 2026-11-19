@@ -25,6 +25,21 @@
       "dependsOrder": "parallel",
       "problemMatcher": []
     },
+    {
+      "label": "Curso4: Testes",
+      "type": "shell",
+      "command": "dotnet watch test",
+      "options": { "cwd": "${workspaceFolder}/ScreenSound-Curso4/ScreenSound.Tests.Integracao" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "group": "curso4", "panel": "dedicated" }
+    },
+    {
+      "label": "Curso4: API + Testes",
+      "dependsOn": ["Curso4: API", "Curso4: Testes"],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    },
 
     {
       "label": "Blazor: API",
