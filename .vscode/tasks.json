@@ -42,6 +42,16 @@
     },
 
     {
+      "label": "Selenium: WebApp (Leilões)",
+      "type": "shell",
+      "command": "dotnet run --launch-profile Alura.LeilaoOnline.WebApp",
+      "options": { "cwd": "${workspaceFolder}/Selenium WebDriver/Selenium.Tests/Alura.LeilaoOnline.WebApp" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "group": "selenium", "panel": "dedicated" }
+    },
+
+    {
       "label": "Blazor: API",
       "type": "shell",
       "command": "dotnet run --launch-profile https",
