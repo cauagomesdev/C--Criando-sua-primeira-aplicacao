@@ -1,15 +1,14 @@
 ﻿using System.Linq;
 
-namespace Alura.LeilaoOnline.Core
+namespace Alura.LeilaoOnline.Core;
+
+public class MaiorValor : IModalidadeAvaliacao
 {
-    public class MaiorValor : IModalidadeAvaliacao
+    public Lance Avalia(Leilao leilao)
     {
-        public Lance Avalia(Leilao leilao)
-        {
-            return leilao.Lances
-                .DefaultIfEmpty(new Lance(null, 0))
-                .OrderBy(l => l.Valor)
-                .LastOrDefault();
-        }
+        return leilao.Lances
+            .DefaultIfEmpty(new Lance(null, 0))
+            .OrderBy(l => l.Valor)
+            .LastOrDefault();
     }
 }

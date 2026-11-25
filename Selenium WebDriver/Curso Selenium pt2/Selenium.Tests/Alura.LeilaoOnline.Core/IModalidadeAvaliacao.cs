@@ -1,7 +1,6 @@
-﻿namespace Alura.LeilaoOnline.Core
+﻿namespace Alura.LeilaoOnline.Core;
+
+public interface IModalidadeAvaliacao
 {
-    public interface IModalidadeAvaliacao
-    {
-        Lance Avalia(Leilao leilao);
-    }
+    Lance Avalia(Leilao leilao);
 }
