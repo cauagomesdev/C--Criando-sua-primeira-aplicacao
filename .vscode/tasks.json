@@ -42,10 +42,19 @@
     },
 
     {
-      "label": "Selenium: WebApp (Leilões)",
+      "label": "Selenium pt1: WebApp (Leilões)",
       "type": "shell",
       "command": "dotnet run --launch-profile Alura.LeilaoOnline.WebApp",
-      "options": { "cwd": "${workspaceFolder}/Selenium WebDriver/Selenium.Tests/Alura.LeilaoOnline.WebApp" },
+      "options": { "cwd": "${workspaceFolder}/Selenium WebDriver/Curso Selenium pt1/Selenium.Tests/Alura.LeilaoOnline.WebApp" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "group": "selenium", "panel": "dedicated" }
+    },
+    {
+      "label": "Selenium pt2: WebApp (Leilões)",
+      "type": "shell",
+      "command": "dotnet run --launch-profile Alura.LeilaoOnline.WebApp",
+      "options": { "cwd": "${workspaceFolder}/Selenium WebDriver/Curso Selenium pt2/Selenium.Tests/Alura.LeilaoOnline.WebApp" },
       "isBackground": true,
       "problemMatcher": [],
       "presentation": { "group": "selenium", "panel": "dedicated" }
