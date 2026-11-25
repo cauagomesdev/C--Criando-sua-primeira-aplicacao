@@ -59,6 +59,15 @@
       "problemMatcher": [],
       "presentation": { "group": "selenium", "panel": "dedicated" }
     },
+    {
+      "label": "Selenium pt3: WebApp (Leilões)",
+      "type": "shell",
+      "command": "dotnet run --launch-profile Alura.LeilaoOnline.WebApp",
+      "options": { "cwd": "${workspaceFolder}/Selenium WebDriver/Curso Selenium pt3/Selenium.Tests/Alura.LeilaoOnline.WebApp" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "group": "selenium", "panel": "dedicated" }
+    },
 
     {
       "label": "Blazor: API",
