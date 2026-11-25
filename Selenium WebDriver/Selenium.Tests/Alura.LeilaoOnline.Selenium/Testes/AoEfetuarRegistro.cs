@@ -41,7 +41,7 @@ public class AoEfetuarRegistro
         var botaoRegistro = driver.FindElement(By.Id("btnRegistro"));
 
         inputNome.SendKeys("Cauã Gomes");
-        inputEmail.SendKeys("cauaaguiarti@gmail.com");
+        inputEmail.SendKeys("cauaaguiarteste@gmail.com");
         inputPassword.SendKeys("123456");
         inputConfirmPassword.SendKeys("123456");
         //act - efetuamos o registro
