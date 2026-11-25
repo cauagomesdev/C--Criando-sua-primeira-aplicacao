@@ -1,8 +1,5 @@
-using System.ComponentModel.DataAnnotations;
-using System.Net.Mail;
 using Alura.LeilaoOnline.Selenium.Fixtures;
 using Alura.LeilaoOnline.Selenium.PageObjects;
-using Microsoft.VisualStudio.TestPlatform.Common.Telemetry;
 using OpenQA.Selenium;
 
 namespace Alura.LeilaoOnline.Selenium.Testes;
@@ -22,34 +19,20 @@ public class AoEfetuarRegistro
     {
         //arrange - dado Chrome aberto, página inicial do sistema de leilões
         //dados de registro válidos informados
+        var registroPO = new RegistroPO(driver);
+        registroPO.Visitar();
 
-        driver.Navigate().GoToUrl("http://localhost:5000");
+        registroPO.PreencherFormulario(
+            nome: "Cauã Gomes",
+            email: "cauaaguiarteste@gmail.com",
+            password: "123456",
+            confirmPassword: "123456"
+        );
 
-        //nome
-        var inputNome = driver.FindElement(By.Id("Nome"));
-
-        //email
-        var inputEmail = driver.FindElement(By.Id("Email"));
-
-        //password
-        var inputPassword = driver.FindElement(By.Id("Password"));
-
-        //confirmpassword
-        var inputConfirmPassword = driver.FindElement(By.Id("ConfirmPassword"));
-
-        //botão de registro
-        var botaoRegistro = driver.FindElement(By.Id("btnRegistro"));
-
-        inputNome.SendKeys("Cauã Gomes");
-        inputEmail.SendKeys("cauaaguiarteste@gmail.com");
-        inputPassword.SendKeys("123456");
-        inputConfirmPassword.SendKeys("123456");
         //act - efetuamos o registro
-
-        botaoRegistro.Click();
+        registroPO.SubmeteFormulario();
 
         //assert - devemos nos direcionar para uma página de agradecimento
-
         Assert.Contains("Obrigado", driver.PageSource);
     }
 
@@ -66,36 +49,16 @@ public class AoEfetuarRegistro
     )
     {
         //arrange - dado Chrome aberto, página inicial do sistema de leilões
-        //dados de registro válidos informados
+        //dados de registro inválidos informados
+        var registroPO = new RegistroPO(driver);
+        registroPO.Visitar();
 
-        driver.Navigate().GoToUrl("http://localhost:5000");
-
-        //nome
-        var inputNome = driver.FindElement(By.Id("Nome"));
-
-        //email
-        var inputEmail = driver.FindElement(By.Id("Email"));
-
-        //password
-        var inputPassword = driver.FindElement(By.Id("Password"));
-
-        //confirmpassword
-        var inputConfirmPassword = driver.FindElement(By.Id("ConfirmPassword"));
-
-        //botão de registro
-        var botaoRegistro = driver.FindElement(By.Id("btnRegistro"));
-
-        inputNome.SendKeys(nome);
-        inputEmail.SendKeys(email);
-        inputPassword.SendKeys(password);
-        inputConfirmPassword.SendKeys(confirmPassword);
+        registroPO.PreencherFormulario(nome, email, password, confirmPassword);
 
         //act - efetuamos o registro
-
-        botaoRegistro.Click();
+        registroPO.SubmeteFormulario();
 
         //assert - devemos ficar na página home
-
         Assert.Contains("section-registro", driver.PageSource);
     }
 
@@ -103,22 +66,14 @@ public class AoEfetuarRegistro
     public void DadoNomeEmBrancoDeveMostrarMensagemDeErro()
     {
         //arrange - dado Chrome aberto, página inicial do sistema de leilões
-        //dados de registro válidos informados
+        var registroPO = new RegistroPO(driver);
+        registroPO.Visitar();
 
-        driver.Navigate().GoToUrl("http://localhost:5000");
+        //act - efetuamos o registro sem preencher nada
+        registroPO.SubmeteFormulario();
 
-        //botão de registro
-        var botaoRegistro = driver.FindElement(By.Id("btnRegistro"));
-
-        //act - efetuamos o registro
-        botaoRegistro.Click();
-
-        //assert - devemos ficar na página home
-        IWebElement elemento = driver.FindElement(
-            By.CssSelector("span.msg-erro[data-valmsg-for=Nome]")
-        );
-
-        Assert.Equal("The Nome field is required.", elemento.Text);
+        //assert - deve mostrar a mensagem de erro do nome
+        Assert.Equal("The Nome field is required.", registroPO.NomeMensagemErro);
     }
 
     [Fact]
@@ -134,7 +89,6 @@ public class AoEfetuarRegistro
         registroPO.SubmeteFormulario();
 
         //assert
-
-        Assert.Equal("Please enter a valid email address.", registroPO.NomeMensagemErro);
+        Assert.Equal("Please enter a valid email address.", registroPO.EmailMensagemErro);
     }
 }

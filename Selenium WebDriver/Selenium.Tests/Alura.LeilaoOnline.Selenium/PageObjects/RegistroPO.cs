@@ -11,9 +11,18 @@ public class RegistroPO
     private By byInputPassword;
     private By byInputConfirmPassword;
     private By byBotaoRegistro;
+    private By bySpanErroNome;
     private By bySpanErroEmail;
 
-    public string NomeMensagemErro => driver.FindElement(bySpanErroEmail).Text;
+    public string NomeMensagemErro => driver.FindElement(bySpanErroNome).Text;
+
+    public string EmailMensagemErro => driver.FindElement(bySpanErroEmail).Text;
+
+    /// <summary>Textos de todas as mensagens de erro (spans) do formulário de registro.</summary>
+    public IEnumerable<string> MensagensDeErro =>
+        driver.FindElement(byFormRegistro)
+            .FindElements(By.TagName("span"))
+            .Select(span => span.Text);
 
     public RegistroPO(IWebDriver driver)
     {
@@ -24,6 +33,7 @@ public class RegistroPO
         byInputPassword = By.Id("Password");
         byInputConfirmPassword = By.Id("ConfirmPassword");
         byBotaoRegistro = By.Id("btnRegistro");
+        bySpanErroNome = By.CssSelector("span.msg-erro[data-valmsg-for=Nome]");
         bySpanErroEmail = By.CssSelector("span.msg-erro[data-valmsg-for=Email]");
     }
 

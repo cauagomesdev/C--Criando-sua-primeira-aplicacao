@@ -1,7 +1,6 @@
 ﻿using Alura.LeilaoOnline.Selenium.Fixtures;
 using Alura.LeilaoOnline.Selenium.PageObjects;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 
 namespace Alura.LeilaoOnline.Selenium.Testes;
 
@@ -58,11 +57,9 @@ public class AoNavegarParaHome
 
         //assert
 
-        var form = driver.FindElement(By.TagName("form"));
-        var spans = form.FindElements(By.TagName("span"));
-        foreach (var span in spans)
+        foreach (var mensagem in registroPO.MensagensDeErro)
         {
-            Assert.True(string.IsNullOrEmpty(span.Text));
+            Assert.True(string.IsNullOrEmpty(mensagem));
         }
     }
 }
