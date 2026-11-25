@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Alura.LeilaoOnline.Selenium.Helpers;
+using OpenQA.Selenium;
 
 namespace Alura.LeilaoOnline.Selenium.PageObjects;
 
@@ -30,7 +31,6 @@ public class LoginPO
 
     public void SubmeteFormulario()
     {
-        driver.FindElement(byBotaoLogin).Submit();
+        TestHelper.ClicarEEsperarTrocaDePagina(driver, driver.FindElement(byBotaoLogin));
     }
-
 }
