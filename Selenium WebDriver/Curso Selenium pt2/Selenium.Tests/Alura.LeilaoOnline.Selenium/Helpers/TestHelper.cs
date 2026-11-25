@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
 
-namespace Alura.LeilaoOnline.Selenium.Helpers
+namespace Alura.LeilaoOnline.Selenium.Helpers;
+
+public static class TestHelper
 {
-    public static class TestHelper
-    {
-        public static string PastaDoExecutavel => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-    }
+    public static string PastaDoExecutavel =>
+        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? AppContext.BaseDirectory;
 }

@@ -9,50 +9,49 @@ using Alura.LeilaoOnline.WebApp.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Alura.LeilaoOnline.WebApp.Controllers
+namespace Alura.LeilaoOnline.WebApp.Controllers;
+
+public class AutenticacaoController : Controller
 {
-    public class AutenticacaoController : Controller
+    private readonly IRepositorio<Usuario> _repo;
+
+    public AutenticacaoController(IRepositorio<Usuario> repositorio)
     {
-        private readonly IRepositorio<Usuario> _repo;
+        _repo = repositorio;
+    }
 
-        public AutenticacaoController(IRepositorio<Usuario> repositorio)
-        {
-            _repo = repositorio;
-        }
+    [HttpGet]
+    public IActionResult Login()
+    {
+        return View();
+    }
 
-        [HttpGet]
-        public IActionResult Login()
+    [HttpPost]
+    public IActionResult Login(LoginViewModel model)
+    {
+        if (ModelState.IsValid)
         {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Login(LoginViewModel model)
-        {
-            if (ModelState.IsValid)
+            var usuario = _repo.Todos.First(u => u.Email == model.Login && u.Senha == model.Password);
+            if (usuario != null)
             {
-                var usuario = _repo.Todos.First(u => u.Email == model.Login && u.Senha == model.Password);
-                if (usuario != null)
+                usuario = _repo.BuscarPorId(usuario.Id);
+                //autenticar
+                HttpContext.Session.Set<Usuario>("usuarioLogado", usuario);
+                if (usuario.Interessada == null)
                 {
-                    usuario = _repo.BuscarPorId(usuario.Id);
-                    //autenticar
-                    HttpContext.Session.Set<Usuario>("usuarioLogado", usuario);
-                    if (usuario.Interessada == null)
-                    {
-                        return RedirectToAction("Index", "Leiloes");
-                    }
-                    return RedirectToAction("Index", "Interessadas");
+                    return RedirectToAction("Index", "Leiloes");
                 }
-                ModelState.AddModelError("usuarioInvalido", "Usuário não encontrado");
+                return RedirectToAction("Index", "Interessadas");
             }
-            return View(model);
+            ModelState.AddModelError("usuarioInvalido", "Usuário não encontrado");
         }
+        return View(model);
+    }
 
-        [HttpGet]
-        public IActionResult Logout()
-        {
-            HttpContext.Session.Remove("usuarioLogado");
-            return RedirectToAction("Index", new { Controller = "Home" });
-        }
+    [HttpGet]
+    public IActionResult Logout()
+    {
+        HttpContext.Session.Remove("usuarioLogado");
+        return RedirectToAction("Index", new { Controller = "Home" });
     }
 }

@@ -7,48 +7,47 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Alura.LeilaoOnline.WebApp
+namespace Alura.LeilaoOnline.WebApp;
+
+public class Startup
 {
-    public class Startup
+    public IConfiguration Configuration { get; }
+
+    public Startup(IConfiguration cfg)
     {
-        public IConfiguration Configuration { get; }
+        Configuration = cfg;
+    }
 
-        public Startup(IConfiguration cfg)
+    // This method gets called by the runtime. Use this method to add services to the container.
+    // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+    public void ConfigureServices(IServiceCollection services)
+    {
+        var cnxString = Configuration.GetConnectionString("LeiloesDB");
+        services.AddDbContext<LeiloesContext>(options =>
         {
-            Configuration = cfg;
+            options.UseSqlServer(cnxString);
+        });
+        services.AddTransient<IModalidadeAvaliacao, MaiorValor>();
+        services.AddTransient<IRepositorio<Leilao>, RepositorioLeilao>();
+        services.AddTransient<IRepositorio<Interessada>, RepositorioInteressada>();
+        services.AddTransient<IRepositorio<Usuario>, RepositorioUsuario>();
+        services.AddDistributedMemoryCache();
+        services.AddSession();
+        services.AddControllersWithViews();
+    }
+
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
-        {
-            var cnxString = Configuration.GetConnectionString("LeiloesDB");
-            services.AddDbContext<LeiloesContext>(options =>
-            {
-                options.UseSqlServer(cnxString);
-            });
-            services.AddTransient<IModalidadeAvaliacao, MaiorValor>();
-            services.AddTransient<IRepositorio<Leilao>, RepositorioLeilao>();
-            services.AddTransient<IRepositorio<Interessada>, RepositorioInteressada>();
-            services.AddTransient<IRepositorio<Usuario>, RepositorioUsuario>();
-            services.AddDistributedMemoryCache();
-            services.AddSession();
-            services.AddControllersWithViews();
-        }
+        app.UseStaticFiles();
+        app.UseRouting();
+        app.UseSession();
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseStaticFiles();
-            app.UseRouting();
-            app.UseSession();
-
-            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
-        }
+        app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
     }
 }
