@@ -14,7 +14,7 @@ public class DetalheLeilaoPO
         this.driver = driver;
         byInputValor = By.Id("Valor");
         byBotaoOfertar = By.Id("btnDarLance");
-        byLanceAtual = By.Id("LanceAtual");
+        byLanceAtual = By.Id("lanceAtual");
     }
 
     public double LanceAtual
