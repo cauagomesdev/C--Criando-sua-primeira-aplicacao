@@ -11,6 +11,10 @@ public class TestFixture : IDisposable
     public TestFixture()
     {
         Driver = new ChromeDriver();
+
+        // Janela grande: o menu do usuário (meu-perfil/logout) usa
+        // "hide-on-med-and-down" e some em telas com até 992px de largura.
+        Driver.Manage().Window.Maximize();
     }
 
     //TearDown
