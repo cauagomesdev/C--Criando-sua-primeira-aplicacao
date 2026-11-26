@@ -70,6 +70,24 @@
     },
 
     {
+      "label": "Refatoracao: API (Adopet)",
+      "type": "shell",
+      "command": "dotnet run --launch-profile http",
+      "options": { "cwd": "${workspaceFolder}/Refatoracao/BoasPraticasCsharp/Alura.Adopet.API" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "group": "refatoracao", "panel": "dedicated" }
+    },
+    {
+      "label": "Refatoracao: Console (Adopet)",
+      "type": "shell",
+      "command": "dotnet run -- show lista.csv",
+      "options": { "cwd": "${workspaceFolder}/Refatoracao/BoasPraticasCsharp/Alura.Adopet.Console" },
+      "problemMatcher": [],
+      "presentation": { "group": "refatoracao", "panel": "dedicated" }
+    },
+
+    {
       "label": "Blazor: API",
       "type": "shell",
       "command": "dotnet run --launch-profile https",
