@@ -18,21 +18,18 @@ public class AoFiltrarLeiloes
     public void DadoLoginInteressadaDeveMostrarPainelResultado()
     {
         //arrange
-        var loginPO = new LoginPO(driver);
-        loginPO.Visitar();
-        loginPO.PreencheFormulario("fulano@example.org", "123");
-        loginPO.SubmeteFormulario();
+        new LoginPO(driver).EfetuarLoginComCredenciais("fulano@example.org", "123");
 
         var dashboardInteressadaPO = new DashboardInteressadaPO(driver);
 
         //act
-        dashboardInteressadaPO.PesquisarLeiloes(
+        dashboardInteressadaPO.Filtro.PesquisarLeiloes(
             new List<string> { "Arte", "Coleções" },
             "",
-            true);
+            true
+        );
 
         //assert
         Assert.Contains("Resultado da pesquisa", driver.PageSource);
-
     }
 }
