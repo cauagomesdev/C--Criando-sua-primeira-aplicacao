@@ -1,5 +1,7 @@
 using Alura.LeilaoOnline.Selenium.Fixtures;
+using Alura.LeilaoOnline.Selenium.PageObjects;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace Alura.LeilaoOnline.Selenium.Testes;
 
@@ -29,6 +31,9 @@ public class AoOfertarLance
         detalhePO.OfertarLance(300);
 
         //assert
-        Assert.Equal(300, detalhePO.LanceAtual);
+        var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(8));
+        bool iguais = wait.Until(d => detalhePO.LanceAtual == 300);
+
+        Assert.True(iguais);
     }
 }
